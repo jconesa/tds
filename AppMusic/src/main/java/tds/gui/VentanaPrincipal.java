@@ -58,7 +58,7 @@ public class VentanaPrincipal {
 		});
 		panel.add(btnNewButton_1);
 		
-		JPanel panel_1 = new JPanel();
+		JPanel panel_1 = ne	w JPanel();
 		frmVentanaPrincipal.getContentPane().add(panel_1, BorderLayout.WEST);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
