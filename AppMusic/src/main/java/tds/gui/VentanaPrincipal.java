@@ -44,7 +44,7 @@ public class VentanaPrincipal {
 		JPanel panel = new JPanel();
 		frmVentanaPrincipal.getContentPane().add(panel, BorderLayout.NORTH);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+			
 		JLabel lblNewLabel = new JLabel("Hola jesus");
 		panel.add(lblNewLabel);
 		
