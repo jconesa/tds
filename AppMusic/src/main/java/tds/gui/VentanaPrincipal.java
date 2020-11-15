@@ -63,9 +63,9 @@ public class VentanaPrincipal {
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
 		JLabel lblNewLabel_1 = new JLabel("Explorar");
-		lblNewLabel_1.setIcon(new ImageIcon(getClass().getResource("/iconoboton.png")));
-		lblNewLabel_1.setMaximumSize(new Dimension(80,45));
-		lblNewLabel_1.setMinimumSize(new Dimension(80,45));
+		lblNewLabel_1.setIcon(new ImageIcon(getClass().getResource("/raro.png")));
+		lblNewLabel_1.setMaximumSize(new Dimension(40,40));
+		lblNewLabel_1.setMinimumSize(new Dimension(40,40));
 		panel_1.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Nueva lista");
