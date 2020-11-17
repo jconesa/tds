@@ -78,6 +78,9 @@ public class VentanaPrincipal {
 		
 		JComboBox comboBox = new JComboBox();
 		panel_2.add(comboBox);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		panelExplorar.add(lblNewLabel_1, BorderLayout.CENTER);
 
 		
 		
