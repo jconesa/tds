@@ -112,84 +112,7 @@ public class VentanaPrincipal {
 		frmVentanaPrincipal.getContentPane().add(panelMedio, BorderLayout.CENTER);
 		panelMedio.setLayout(new BorderLayout(0, 0));
 	
-		JPanel panel_sur_play = new JPanel();
-		panelMedio.add(panel_sur_play, BorderLayout.SOUTH);
-		panel_sur_play.setLayout(new BorderLayout(0, 0));
 		
-		ImageIcon icnPlay = new ImageIcon(getClass().getResource("/play.png"));
-
-		JButton btnPlay = new JButton(icnPlay);
-		btnPlay.setMinimumSize(new Dimension(100,20));
-		btnPlay.setMaximumSize(new Dimension(100,20));
-
-		panel_sur_play.add(btnPlay, BorderLayout.NORTH);
-		
-		
-	
-		ImageIcon icnPause = new ImageIcon(getClass().getResource("/pausa.png"));
-		JButton btnPause = new JButton( icnPause);
-		btnPause.setMinimumSize(new Dimension(100,20));
-		btnPause.setAlignmentX(Component.BOTTOM_ALIGNMENT);
-		btnPause.setBackground(Color.WHITE);
-		panel_sur_play.add(btnPause);
-		
-	
-		
-		ImageIcon icnAnterior= new ImageIcon(getClass().getResource("/anterior.png"));
-
-		JButton btnAnterior = new JButton(icnAnterior);
-		btnAnterior.setMinimumSize(new Dimension(100,20));
-
-		panel_sur_play.add(btnAnterior, BorderLayout.WEST);
-		
-	
-		
-		ImageIcon icnSiguiente= new ImageIcon(getClass().getResource("/siguiente.png"));
-
-		JButton btnSiguiente = new JButton( icnSiguiente);
-		btnSiguiente.setMinimumSize(new Dimension(100,20));
-
-		panel_sur_play.add(btnSiguiente, BorderLayout.EAST);
-		
-	/*	ImageIcon icnPlay = new ImageIcon(getClass().getResource("/pause.png"));
-		JButton btnPlay = new JButton("pause", icnPlay);
-		btnPlay.setMinimumSize(new Dimension(100,20));
-	//	btnPlay.setAlignmentX(Component.TOP_ALIGNMENT);
-		btnPlay.setBackground(Color.WHITE);
-		panel_sur_play.add(btnPlay);
-		
-		
-		
-		ImageIcon icnPause = new ImageIcon(getClass().getResource("/pause.png"));
-		JButton btnPause = new JButton("pause", icnPause);
-		btnPause.setMinimumSize(new Dimension(100,20));
-		btnPause.setAlignmentX(Component.BOTTOM_ALIGNMENT);
-		btnPause.setBackground(Color.WHITE);
-		panel_sur_play.add(btnPause);
-		
-		
-
-		
-		ImageIcon icnAnterior = new ImageIcon(getClass().getResource("/pause.png"));
-		JButton btnAnterior = new JButton("anterior", icnAnterior);
-		btnAnterior.setMinimumSize(new Dimension(100,20));
-		//btnAnterior.setAlignmentX(Component.LEFT_ALIGNMENT);
-		btnAnterior.setBackground(Color.WHITE);
-
-		panel_sur_play.add(btnAnterior);
-		
-		
-		
-		
-		
-		ImageIcon icnSiguiente = new ImageIcon(getClass().getResource("/pause.png"));
-		JButton btnSiguiente = new JButton("anterior", icnSiguiente);
-		btnSiguiente.setMinimumSize(new Dimension(100,20));
-	//	btnSiguiente.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		btnSiguiente.setBackground(Color.WHITE);
-
-		panel_sur_play.add(btnSiguiente);
-	*/
 		return panelMedio;
 	}
 	private JPanel crearPanelBotones(JPanel panelMedio, JPanel panelExplorar) {
@@ -266,17 +189,59 @@ public class VentanaPrincipal {
 		txtIntrprete = new JTextField();
 		txtIntrprete.setText("Intérprete");
 		panelExplorarNorte.add(txtIntrprete);
-		txtIntrprete.setColumns(10);
+		txtIntrprete.setColumns(8);
 		
 		txtTtulo = new JTextField();
 		txtTtulo.setText("Título");
 		panelExplorarNorte.add(txtTtulo);
-		txtTtulo.setColumns(10);
+		txtTtulo.setColumns(8);
 		
 		JComboBox comboBox = new JComboBox();
 		panelExplorarNorte.add(comboBox);
 		
 		return panelExplorarNorte;
+	}
+	
+	public JPanel crearPanelExploraSur() {
+		
+		JPanel panelSurPlay = new JPanel();
+		panelSurPlay.setLayout(new BorderLayout(0, 0));
+		
+		ImageIcon icnPlay = new ImageIcon(getClass().getResource("/play.png"));
+
+		JButton btnPlay = new JButton(icnPlay);
+		btnPlay.setMinimumSize(new Dimension(100,20));
+		btnPlay.setMaximumSize(new Dimension(100,20));
+
+		panelSurPlay.add(btnPlay, BorderLayout.NORTH);
+		
+		
+	
+		ImageIcon icnPause = new ImageIcon(getClass().getResource("/pausa.png"));
+		JButton btnPause = new JButton(icnPause);
+		btnPause.setMinimumSize(new Dimension(100,20));
+		btnPause.setAlignmentX(Component.BOTTOM_ALIGNMENT);
+		panelSurPlay.add(btnPause);
+		
+	
+		
+		ImageIcon icnAnterior= new ImageIcon(getClass().getResource("/anterior.png"));
+
+		JButton btnAnterior = new JButton(icnAnterior);
+		btnAnterior.setMinimumSize(new Dimension(100,20));
+
+		panelSurPlay.add(btnAnterior, BorderLayout.WEST);
+		
+	
+		
+		ImageIcon icnSiguiente= new ImageIcon(getClass().getResource("/siguiente.png"));
+
+		JButton btnSiguiente = new JButton( icnSiguiente);
+		btnSiguiente.setMinimumSize(new Dimension(100,20));
+
+		panelSurPlay.add(btnSiguiente, BorderLayout.EAST);
+		
+		return panelSurPlay;
 	}
 	
 /*	public JPanel crearPanelExplorarCentro() {
@@ -296,10 +261,11 @@ public class VentanaPrincipal {
 
 	}*/
 	
-	public JPanel crearPanelExplorar(JPanel panelExplorarNorte) {
+	public JPanel crearPanelExplorar(JPanel panelExplorarNorte, JPanel panelExplorarSur) {
 		JPanel panelExplorar = new JPanel();
 		panelExplorar.setLayout(new BorderLayout(0, 0));
 		panelExplorar.add(panelExplorarNorte, BorderLayout.NORTH);
+		panelExplorar.add(panelExplorarSur, BorderLayout.SOUTH);
 		return panelExplorar;
 	}
 	
@@ -316,6 +282,7 @@ public class VentanaPrincipal {
 				}
 		});
 	}
+	
 	
 	public void addManejadorBotonLogout(JButton btnLogout, JPanel panel1) {
 		btnLogout.addActionListener(new ActionListener() {
@@ -343,8 +310,9 @@ public class VentanaPrincipal {
 		JPanel panelMedio = crearPanelMedio();
 		
 		JPanel panelExplorarNorte = crearPanelExplorarNorte();
+		JPanel panelExplorarSur = crearPanelExploraSur();
 		//JPanel panelExplorarCentro = crearPanelExplorarCentro();
-		JPanel panelExplorar = crearPanelExplorar(panelExplorarNorte);
+		JPanel panelExplorar = crearPanelExplorar(panelExplorarNorte, panelExplorarSur);
 		//JPanel panelExplorar2 = crearPanelExplorar(panelExplorarCentro);
 		JPanel panelBotones = crearPanelBotones(panelMedio, panelExplorar);
 		//JPanel panelBotones2 = crearPanelBotones(panelMedio, panelExplorar2);

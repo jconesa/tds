@@ -25,6 +25,7 @@ import tds.controlador.Controlador;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.SwingConstants;
+import com.toedter.calendar.JDateChooser;
 
 public class RegistroView {
 
@@ -38,7 +39,6 @@ public class RegistroView {
 	private JLabel lblPasswordChk;
 	private JTextField txtNombre;
 	private JTextField txtApellidos;
-	private JTextField txtFechaNacimiento;
 	private JTextField txtEmail;
 	private JTextField txtUsuario;
 	private JPasswordField txtPassword;
@@ -58,6 +58,7 @@ public class RegistroView {
 	private JPanel panelCamposEmail;
 	private JPanel panelCamposUsuario;
 	private JPanel panelCamposFechaNacimiento;
+	private JDateChooser dateChooser;
 
 	public RegistroView() {
 		initialize();
@@ -228,9 +229,9 @@ public class RegistroView {
 		lblFechaNacimiento = new JLabel("Fecha de Nacimiento: ", JLabel.RIGHT);
 		panelCamposFechaNacimiento.add(lblFechaNacimiento);
 		fixedSize(lblFechaNacimiento, 130, 20);
-		txtFechaNacimiento = new JTextField();
-		panelCamposFechaNacimiento.add(txtFechaNacimiento);
-		fixedSize(txtFechaNacimiento, 215, 20);
+		
+		dateChooser = new JDateChooser();
+		panelCamposFechaNacimiento.add(dateChooser);
 		lblFechaNacimientoError = new JLabel("Introduce la fecha de nacimiento", SwingConstants.CENTER);
 		fixedSize(lblFechaNacimientoError, 150, 15);
 		lblFechaNacimientoError.setForeground(Color.RED);
@@ -265,7 +266,7 @@ public class RegistroView {
 					registrado = Controlador.getUnicaInstancia().registrarUsuario(txtNombre.getText(),
 							txtApellidos.getText(), txtEmail.getText(), txtUsuario.getText(),
 							new String(txtPassword.getPassword()), 
-							txtFechaNacimiento.getText());
+							dateChooser.getDateFormatString());
 					if (registrado) {
 						JOptionPane.showMessageDialog(frmRegistro, "Asistente registrado correctamente.", "Registro",
 								JOptionPane.INFORMATION_MESSAGE);
@@ -358,10 +359,10 @@ public class RegistroView {
 			txtUsuario.setBorder(BorderFactory.createLineBorder(Color.RED));
 			salida = false;
 		}
-		if (txtFechaNacimiento.getText().isEmpty()) {
+		if (dateChooser.getDateFormatString().isEmpty()) {
 			lblFechaNacimientoError.setVisible(true);
 			lblFechaNacimiento.setForeground(Color.RED);
-			txtFechaNacimiento.setBorder(BorderFactory.createLineBorder(Color.RED));
+			dateChooser.setBorder(BorderFactory.createLineBorder(Color.RED));
 			salida = false;
 		}
 
@@ -393,7 +394,6 @@ public class RegistroView {
 		txtPassword.setBorder(border);
 		txtPasswordChk.setBorder(border);
 		txtUsuario.setBorder(border);
-		txtFechaNacimiento.setBorder(border);
 		
 		lblNombre.setForeground(Color.BLACK);
 		lblApellidos.setForeground(Color.BLACK);
