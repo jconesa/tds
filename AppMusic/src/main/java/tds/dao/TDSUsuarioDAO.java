@@ -26,6 +26,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 	private static final String LOGIN = "login";
 	private static final String PASSWORD = "password";
 	private static final String FECHA_NACIMIENTO = "fechaNacimiento";
+	private static final String PREMIUM = "premium";
 	
 	private ServicioPersistencia servPersistencia;
 
@@ -41,8 +42,10 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		String login = servPersistencia.recuperarPropiedadEntidad(eUsuario, LOGIN);
 		String password = servPersistencia.recuperarPropiedadEntidad(eUsuario, PASSWORD);
 		String fechaNacimiento = servPersistencia.recuperarPropiedadEntidad(eUsuario, FECHA_NACIMIENTO);
+		String premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, PREMIUM);
 
-		Usuario usuario = new Usuario(nombre, apellidos, email, login, password, fechaNacimiento);
+
+		Usuario usuario = new Usuario(nombre, apellidos, email, login, password, fechaNacimiento, premium);
 		usuario.setId(eUsuario.getId());
 		
 		return usuario;
@@ -59,6 +62,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 				new Propiedad(LOGIN, usuario.getLogin()), 
 				new Propiedad(PASSWORD, usuario.getPassword()),
 				new Propiedad(FECHA_NACIMIENTO, usuario.getFechaNacimiento()))));
+				new Propiedad(PREMIUM, usuario.getPremium());
 		return eUsuario;
 	}
 
@@ -84,6 +88,13 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		servPersistencia.anadirPropiedadEntidad(eUsuario, PASSWORD, usuario.getPassword());
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, EMAIL);
 		servPersistencia.anadirPropiedadEntidad(eUsuario, EMAIL, usuario.getEmail());
+	}
+	
+	public void updatePremium(Usuario usuario) {
+		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, PREMIUM);
+		servPersistencia.anadirPropiedadEntidad(eUsuario, PREMIUM, usuario.getPremium());
+
 	}
 
 	public Usuario get(int id) {

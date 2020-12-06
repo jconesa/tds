@@ -266,7 +266,7 @@ public class RegistroView {
 					registrado = Controlador.getUnicaInstancia().registrarUsuario(txtNombre.getText(),
 							txtApellidos.getText(), txtEmail.getText(), txtUsuario.getText(),
 							new String(txtPassword.getPassword()), 
-							dateChooser.getDateFormatString());
+							dateChooser.getDateFormatString(), "false");
 					if (registrado) {
 						JOptionPane.showMessageDialog(frmRegistro, "Asistente registrado correctamente.", "Registro",
 								JOptionPane.INFORMATION_MESSAGE);

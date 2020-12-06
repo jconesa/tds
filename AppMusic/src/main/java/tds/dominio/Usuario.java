@@ -1,4 +1,9 @@
 package tds.dominio;
+import javax.swing.JOptionPane;
+
+import tds.controlador.Controlador;
+import tds.dao.UsuarioDAO;
+import tds.gui.LoginView;
 
 public class Usuario {
 	
@@ -9,9 +14,10 @@ public class Usuario {
 	private String login;
 	private String password;
 	private String fechaNacimiento;
+	private String premium;
 
 	public Usuario(String nombre, String apellidos, String email, String login, String password,
-			String fechaNacimiento) {
+			String fechaNacimiento, String premium) {
 		this.id = 0;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
@@ -19,6 +25,7 @@ public class Usuario {
 		this.login = login;
 		this.password = password;
 		this.fechaNacimiento = fechaNacimiento;
+		this.premium = premium;
 	}
 
 	public int getId() {
@@ -75,6 +82,24 @@ public class Usuario {
 
 	public void setFechaNacimiento(String fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
+	}
+	
+	public String getPremium() {
+		return this.premium;
+	}
+	public void setPremium(String premium) {
+		this.premium = premium;
+	}
+	public void realizarPago() {
+		/*if(this.premium == "true")
+		{
+			int respuesta = JOptionPane.showConfirmDialog(null, "TEST", "TEST", 
+					JOptionPane.YES_NO_OPTION);
+		}*/
+		int respuesta = JOptionPane.showConfirmDialog(null, "TEST", getPremium(), 
+				JOptionPane.YES_NO_OPTION);
+		setPremium("true");
+		Controlador.getUnicaInstancia().hacerPremium();
 	}
 
 }

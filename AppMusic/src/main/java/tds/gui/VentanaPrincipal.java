@@ -5,6 +5,7 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -57,12 +58,18 @@ public class VentanaPrincipal {
 		panel1.add(lblNewLabel);
 		
 
-		JButton btnNewButton = new JButton("Mejora tu cuenta");
-		panel1.add(btnNewButton);
+		if(usuarioActual.getPremium() == "false")
+		{
+			JButton btnPremium = new JButton("Mejora tu cuenta");
+			panel1.add(btnPremium);	
+			addManejadorBotonPremium(btnPremium);
+		}
+
 		
 		JButton btnLogout = new JButton("Logout");
 		panel1.add(btnLogout);
 		
+		addManejadorBotonLogout(btnLogout);
 		return panel1;
 	}
 	
@@ -283,9 +290,22 @@ public class VentanaPrincipal {
 		});
 	}
 	
+	public void addManejadorBotonPremium(JButton btnPremium) {
+		btnPremium.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int respuesta = JOptionPane.showConfirmDialog(null, "Desea hacerse premium por x dinero?", "Hazte premium", 
+						JOptionPane.YES_NO_OPTION);
+				if(respuesta == JOptionPane.YES_OPTION)
+					usuarioActual.realizarPago();
+			}
+			
+		});
+	}
 	
-	public void addManejadorBotonLogout(JButton btnLogout, JPanel panel1) {
+	public void addManejadorBotonLogout(JButton btnLogout) {
 		btnLogout.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				LoginView loginView = new LoginView();
 				loginView.mostrarVentana();

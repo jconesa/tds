@@ -4,6 +4,8 @@ import tds.dao.UsuarioDAO;
 import tds.dao.DAOException;
 import tds.dao.FactoriaDAO;
 import tds.dominio.Usuario;
+import tds.driver.FactoriaServicioPersistencia;
+import tds.driver.ServicioPersistencia;
 import tds.dominio.CatalogoUsuarios;
 
 public final class Controlador {
@@ -45,11 +47,11 @@ public final class Controlador {
 	}
 
 	public boolean registrarUsuario(String nombre, String apellidos, String email, String login, String password,
-			String fechaNacimiento) {
+			String fechaNacimiento, String premium) {
 
 		if (esUsuarioRegistrado(login))
 			return false;
-		Usuario usuario = new Usuario(nombre, apellidos, email, login, password, fechaNacimiento);
+		Usuario usuario = new Usuario(nombre, apellidos, email, login, password, fechaNacimiento, premium);
 
 		UsuarioDAO usuarioDAO = factoria
 				.getUsuarioDAO(); /* Adaptador DAO para almacenar el nuevo Usuario en la BD */
@@ -68,6 +70,12 @@ public final class Controlador {
 
 		CatalogoUsuarios.getUnicaInstancia().removeUsuario(usuario);
 		return true;
+	}
+	
+	public void hacerPremium() {
+		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
+		usuarioDAO.updatePremium(usuarioActual);
+		
 	}
 
 }
