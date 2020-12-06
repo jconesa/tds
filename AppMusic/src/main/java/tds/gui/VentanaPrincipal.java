@@ -60,8 +60,8 @@ public class VentanaPrincipal {
 		JButton btnNewButton = new JButton("Mejora tu cuenta");
 		panel1.add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("Logout");
-		panel1.add(btnNewButton_1);
+		JButton btnLogout = new JButton("Logout");
+		panel1.add(btnLogout);
 		
 		return panel1;
 	}
@@ -287,6 +287,10 @@ public class VentanaPrincipal {
 	public void addManejadorBotonLogout(JButton btnLogout, JPanel panel1) {
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LoginView loginView = new LoginView();
+				loginView.mostrarVentana();
+				
+				frmVentanaPrincipal.dispose();
 			}
 		});
 	}
