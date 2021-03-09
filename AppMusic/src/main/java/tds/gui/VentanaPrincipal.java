@@ -8,9 +8,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import beans.Entidad;
 import tds.controlador.Controlador;
+import tds.dominio.Cancion;
 import tds.dominio.CatalogoUsuarios;
 import tds.dominio.Usuario;
 import tds.driver.ServicioPersistencia;
@@ -18,10 +21,13 @@ import tds.driver.ServicioPersistencia;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
+
 import java.awt.Component;
 import java.awt.Color;
 import javax.swing.JTextPane;
@@ -35,7 +41,10 @@ public class VentanaPrincipal {
 	private JFrame frmVentanaPrincipal;
 	private JTextField txtTtulo;
 	private JTextField txtIntrprete;
+	private JComboBox<String> generos;
 	private Usuario usuarioActual = Controlador.getUnicaInstancia().getUsuarioActual();
+	JTable tabla;
+	DefaultTableModel modelo;
 
 	public VentanaPrincipal() {
 		initialize();
@@ -113,6 +122,37 @@ public class VentanaPrincipal {
 		return panelCancion;
 	}
 	*/
+	private void crearTabla() {
+		tabla = new JTable();
+		tabla.setCellSelectionEnabled(false);
+		tabla.setShowGrid(true);
+		tabla.setShowVerticalLines(true);
+		tabla.setGridColor(Color.gray); 
+		modelo = new DefaultTableModel() {
+			
+			private static final long serialVersionUID = 1L;
+			private String[] columnNames = {"Título", "Intérprete"};
+			
+			 public String getColumnName(int column) {
+				 return columnNames[column];
+			 }
+			 
+			public int getColumnCount() {return 2;}
+			
+			public boolean isCellEditable(int row, int col){
+				return false;
+			}
+		 };
+		tabla.setModel(modelo);
+		 TableColumn columna = tabla.getColumn("Título");
+		columna.setPreferredWidth(70);
+		columna.setMinWidth(70);
+		columna.setMaxWidth(70);
+		columna = tabla.getColumn("Intérprete");
+		columna.setPreferredWidth(250);
+		columna.setMinWidth(250);
+		columna.setMaxWidth(250);
+		} 
 	
 	private JPanel crearPanelMedio() {
 		JPanel panelMedio = new JPanel();
@@ -193,19 +233,47 @@ public class VentanaPrincipal {
 	
 	public JPanel crearPanelExplorarNorte() {
 		JPanel panelExplorarNorte = new JPanel();
+		JPanel panelExplorarNorteN = new JPanel();
+		JPanel panelExplorarNorteC = new JPanel();
+		panelExplorarNorte.setLayout(new BorderLayout(0, 0));
+		
 		txtIntrprete = new JTextField();
 		txtIntrprete.setText("Intérprete");
-		panelExplorarNorte.add(txtIntrprete);
+		panelExplorarNorteN.add(txtIntrprete);
 		txtIntrprete.setColumns(8);
 		
 		txtTtulo = new JTextField();
 		txtTtulo.setText("Título");
-		panelExplorarNorte.add(txtTtulo);
+		panelExplorarNorteN.add(txtTtulo);
 		txtTtulo.setColumns(8);
 		
-		JComboBox comboBox = new JComboBox();
-		panelExplorarNorte.add(comboBox);
+
+		generos = new JComboBox<String>();
+		generos.setEditable(true);
+		generos.addItem("Bolero");
+		generos.addItem("Cantautor");
+		generos.addItem("Clásica");
+		generos.addItem("Flamenco");
+		generos.addItem("Jazz");
+		generos.addItem("Opera");
+		generos.addItem("Pop");
+		generos.addItem("Rock");
+		generos.addItem("Romántica");
+		panelExplorarNorteN.add(generos, BorderLayout.NORTH);
 		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setMinimumSize(new Dimension(100, 20));
+		btnBuscar.setBackground(Color.WHITE);
+		panelExplorarNorteC.add(btnBuscar);
+		
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.setMinimumSize(new Dimension(100, 20));
+		btnCancelar.setBackground(Color.WHITE);
+		panelExplorarNorteC.add(btnCancelar);
+		
+		
+		panelExplorarNorte.add(panelExplorarNorteN, BorderLayout.NORTH);
+		panelExplorarNorte.add(panelExplorarNorteC, BorderLayout.CENTER);
 		return panelExplorarNorte;
 	}
 	
@@ -251,6 +319,54 @@ public class VentanaPrincipal {
 		return panelSurPlay;
 	}
 	
+	public LinkedList<Cancion> aplicarFiltro(LinkedList<Cancion> listaCanciones){
+		LinkedList<Cancion> listaCancionesFiltrada = new LinkedList<Cancion>();
+		
+		// Interprete y titulo vacios
+		if(txtIntrprete.getText().isEmpty() && txtTtulo.getText().isEmpty()) {
+			String genero = generos.getSelectedItem().toString();
+			for(Cancion cancion : listaCanciones) {
+				if(genero.equals(cancion.getGenero())) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}
+		// Con interprete y genero, titulo vacio
+		if(!txtIntrprete.getText().isEmpty() && txtTtulo.getText().isEmpty()) {
+			String genero = generos.getSelectedItem().toString();
+			String interprete = txtIntrprete.getText();
+			for(Cancion cancion : listaCanciones) {
+				if(genero.equals(cancion.getGenero()) && interprete.equals(cancion.getInterprete())) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}
+		
+		// Sin interprete, con titulo y género
+		if(txtIntrprete.getText().isEmpty() && !txtTtulo.getText().isEmpty()) {
+			String genero = generos.getSelectedItem().toString();
+			String titulo = txtTtulo.getText();
+			for(Cancion cancion : listaCanciones) {
+				if(genero.equals(cancion.getGenero()) && titulo.equals(cancion.getTitulo())) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}
+		// Con todo
+		if(!txtIntrprete.getText().isEmpty() && !txtTtulo.getText().isEmpty()) {
+			String genero = generos.getSelectedItem().toString();
+			String titulo = txtTtulo.getText();
+			String interprete = txtIntrprete.getText();
+			for(Cancion cancion : listaCanciones) {
+				if(genero.equals(cancion.getGenero()) && interprete.equals(cancion.getInterprete()) && titulo.equals(cancion.getTitulo()) ) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}
+		
+		return listaCancionesFiltrada;
+		
+	}
 /*	public JPanel crearPanelExplorarCentro() {
 		JPanel panelExplorarCentro = new JPanel();
 		ImageIcon icnPause = new ImageIcon(getClass().getResource("/pause.png"));
