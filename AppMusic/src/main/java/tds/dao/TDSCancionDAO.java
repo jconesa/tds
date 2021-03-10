@@ -2,15 +2,18 @@ package tds.dao;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import beans.Entidad;
 import beans.Propiedad;
 import tds.dominio.Cancion;
+import tds.dominio.Usuario;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 
 public class TDSCancionDAO {
-	private static final String CANCION = "Usuario";
+	private static final String CANCION = "Cancion";
 	
 	private static final String TITULO = "titulo";
 	private static final String INTERPRETE = "interprete";
@@ -68,6 +71,23 @@ public class TDSCancionDAO {
 		eCancion = servPersistencia.recuperarEntidad(cancion.getId());
 		
 		return servPersistencia.borrarEntidad(eCancion);
+	}
+	
+	public Cancion get(int id) {
+		Entidad eCancion = servPersistencia.recuperarEntidad(id);
+		
+		return entidadToCancion(eCancion);
+	}
+	
+	public List<Cancion> getAll() {
+		List<Entidad> entidades = servPersistencia.recuperarEntidades(CANCION);
+
+		List<Cancion> canciones = new LinkedList<Cancion>();
+		for (Entidad eCancion : entidades) {
+			canciones.add(get(eCancion.getId()));
+		}
+		
+		return canciones;
 	}
 
 }

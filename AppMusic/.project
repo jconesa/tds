@@ -20,11 +20,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>JMF-2.1.1e</name>
-			<type>2</type>
-			<location>C:/Users/Joaquín/git/tds/AppMusic/lib/JMF-2.1.1e</location>
-		</link>
-	</linkedResources>
 </projectDescription>

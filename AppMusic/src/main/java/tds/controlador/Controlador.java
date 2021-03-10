@@ -1,9 +1,12 @@
 package tds.controlador;
 
 import tds.dao.UsuarioDAO;
+import tds.dao.CancionDAO;
 import tds.dao.DAOException;
 import tds.dao.FactoriaDAO;
 import tds.dominio.Usuario;
+import tds.dominio.Cancion;
+import tds.dominio.CatalogoCanciones;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import tds.dominio.CatalogoUsuarios;
@@ -60,6 +63,21 @@ public final class Controlador {
 		CatalogoUsuarios.getUnicaInstancia().addUsuario(usuario);
 		return true;
 	}
+	
+	public boolean registrarCancion(String titulo, String interprete, String genero, String rutaFichero, int numReproducciones, String url) {
+
+		//Checkear si ya esta metida la canción
+		Cancion cancion = new Cancion(titulo, interprete, genero, rutaFichero, numReproducciones, url);
+
+		CancionDAO cancionDAO = factoria
+				.getCancionDAO(); /* Adaptador DAO para almacenar el nuevo Usuario en la BD */
+		cancionDAO.create(cancion);
+
+		CatalogoCanciones.getUnicaInstancia().addCancion(cancion);
+		return true;
+	}
+	
+
 
 	public boolean borrarUsuario(Usuario usuario) {
 		if (!esUsuarioRegistrado(usuario.getLogin()))

@@ -12,15 +12,19 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import beans.Entidad;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import tds.controlador.Controlador;
 import tds.dominio.Cancion;
 import tds.dominio.CatalogoUsuarios;
 import tds.dominio.Usuario;
 import tds.driver.ServicioPersistencia;
+import tds.dominio.Reproductor;
 
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.LinkedList;
 import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
@@ -34,6 +38,10 @@ import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+
+import java.io.File;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 
 public class VentanaPrincipal {
@@ -315,6 +323,7 @@ public class VentanaPrincipal {
 		btnSiguiente.setMinimumSize(new Dimension(100,20));
 
 		panelSurPlay.add(btnSiguiente, BorderLayout.EAST);
+		addManejadorBotonPlay(btnPlay);
 		
 		return panelSurPlay;
 	}
@@ -419,6 +428,28 @@ public class VentanaPrincipal {
 		});
 	}
 	
+	public void addManejadorBotonPlay(JButton btnPlay) {
+		btnPlay.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// activar reproductor
+				try {
+				com.sun.javafx.application.PlatformImpl.startup(()->{});
+				} catch(Exception ex) {
+				ex.printStackTrace();
+				System.out.println("Exception: " + ex.getMessage());
+				 }
+
+				// reproducir una canción
+
+					//String fileName = cancion.getRutaFichero();
+					File f = new File("D:\\cancionesTDS\\Coldplay-Viva_La_Vida.mp3");
+					Media hit = new Media(f.toURI().toString());
+					MediaPlayer mediaPlayer = new MediaPlayer(hit);
+					mediaPlayer.play();
+				}
+		});
+	}
 	public void addManejadorBotonLogout(JButton btnLogout) {
 		btnLogout.addActionListener(new ActionListener() {
 			@Override
