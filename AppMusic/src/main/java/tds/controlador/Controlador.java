@@ -11,12 +11,15 @@ import tds.dominio.CatalogoCanciones;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import tds.dominio.CatalogoUsuarios;
+import tds.dominio.Repro;
+import tds.dominio.Reproductor;
 
 public final class Controlador {
 
 	private Usuario usuarioActual;
 	private static Controlador unicaInstancia;
 	private FactoriaDAO factoria;
+	private Repro repro = new Repro();
 
 	private Controlador() {
 		usuarioActual = null;
@@ -90,15 +93,14 @@ public final class Controlador {
 		CatalogoCanciones.getUnicaInstancia().addCancion(cancion);
 		return true;
 	}
-	public void registrarCancion2(String titulo, String interprete, String genero, int numReproducciones, String url) {
-
-		System.out.println(titulo);
-		System.out.println(genero);
-		System.out.println(numReproducciones);
-		System.out.println(url);
-	}
 	
+	public void playSong(String titulo) {
+		Cancion cancion = CatalogoCanciones.getUnicaInstancia().getCancion(titulo);
+		System.out.println("LA CANCION ES");
+		System.out.println(cancion.getUrl());
 
+		repro.playCancion(cancion.getUrl());
+	}
 
 	public boolean borrarUsuario(Usuario usuario) {
 		if (!esUsuarioRegistrado(usuario.getLogin()))

@@ -287,12 +287,13 @@ public class VentanaPrincipal {
 		return panelExplorarNorte;
 	}
 
-	public JPanel crearPanelExploraTabla() {
+	public DemoTabla crearPanelExploraTabla() {
 		
 		DemoTabla panelExplorarTabla = new DemoTabla();
 		return panelExplorarTabla;
 	}
-	public JPanel crearPanelExploraSur() {
+	
+	public JPanel crearPanelExploraSur(DemoTabla tabla) {
 		
 		JPanel panelSurPlay = new JPanel();
 		panelSurPlay.setLayout(new BorderLayout(0, 0));
@@ -330,7 +331,7 @@ public class VentanaPrincipal {
 		btnSiguiente.setMinimumSize(new Dimension(100,20));
 
 		panelSurPlay.add(btnSiguiente, BorderLayout.EAST);
-		addManejadorBotonPlay(btnPlay);
+		addManejadorBotonPlay(btnPlay, tabla);
 		
 		return panelSurPlay;
 	}
@@ -436,28 +437,18 @@ public class VentanaPrincipal {
 		});
 	}
 	
-	public void addManejadorBotonPlay(JButton btnPlay) {
+	public void addManejadorBotonPlay(JButton btnPlay, DemoTabla panelExplorarTabla) {
 		btnPlay.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// activar reproductor
-				try {
-				com.sun.javafx.application.PlatformImpl.startup(()->{});
-				} catch(Exception ex) {
-				ex.printStackTrace();
-				System.out.println("Exception: " + ex.getMessage());
-				 }
-
-				// reproducir una canción
-
-					//String fileName = cancion.getRutaFichero();
-					File f = new File("D:\\cancionesTDS\\Coldplay-Viva_La_Vida.mp3");
-					Media hit = new Media(f.toURI().toString());
-					MediaPlayer mediaPlayer = new MediaPlayer(hit);
-					mediaPlayer.play();
-				}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JTable tabla = panelExplorarTabla.getTabla();
+            String titulo = (String) tabla.getValueAt(tabla.getSelectedRow(), 0);
+			Controlador.getUnicaInstancia().playSong(titulo);
+		}
 		});
 	}
+	
+
 	public void addManejadorBotonLogout(JButton btnLogout) {
 		btnLogout.addActionListener(new ActionListener() {
 			@Override
@@ -489,8 +480,9 @@ public class VentanaPrincipal {
 		JPanel panelMedio = crearPanelMedio();
 		
 		JPanel panelExplorarNorte = crearPanelExplorarNorte();
-		JPanel panelExplorarSur = crearPanelExploraSur();
-		JPanel panelExplorarTabla = crearPanelExploraTabla();
+		DemoTabla panelExplorarTabla = crearPanelExploraTabla();
+		JPanel panelExplorarSur = crearPanelExploraSur(panelExplorarTabla);
+
 		//JPanel panelExplorarCentro = crearPanelExplorarCentro();
 		JPanel panelExplorar = crearPanelExplorar(panelExplorarNorte, panelExplorarSur, panelExplorarTabla);
 		//JPanel panelExplorar2 = crearPanelExplorar(panelExplorarCentro);

@@ -16,21 +16,28 @@ import tds.dominio.CatalogoCanciones;
 
 public class DemoTabla extends JPanel {
 	private boolean DEBUG = true;
-
+	JTable tabla;
 	public DemoTabla() {
 		// Crea una JTable
-		JTable tabla = new JTable(new MiTableModel());
+		tabla = new JTable(new MiTableModel());
 		DefaultTableModel model = (DefaultTableModel) tabla.getModel();
 		tabla.setPreferredScrollableViewportSize(new Dimension(1000, 400));
 		tabla.setFillsViewportHeight(true);
 		// Crea un scroll y le añade la tabla.
 		JScrollPane scrollPane = new JScrollPane(tabla);
-		model.addColumn("Col1");
-		model.addColumn("Col2");
+		try {
+			System.out.println(CatalogoCanciones.getUnicaInstancia().getCanciones().size());
+		} catch (DAOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		try {
 			for(Cancion cancion : CatalogoCanciones.getUnicaInstancia().getCanciones()) {
+				System.out.println(cancion.getTitulo());
+				System.out.println(cancion.getInterprete());
 				model.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete()});
+				//model.addRow(new Object[] { "hola", "adios" });
 			}
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
@@ -38,6 +45,10 @@ public class DemoTabla extends JPanel {
 		}
 		
 		add(scrollPane);
+	}
+	
+	public JTable getTabla() {
+		return tabla;
 	}
 
 	// Clase interna que implementa AbstractTableModel
@@ -47,47 +58,18 @@ public class DemoTabla extends JPanel {
 		 */
 		private static final long serialVersionUID = 1L;
 		private String[] columnNames = { "Título", "Apellido"};
-		/*private Object[][] data = {
-	 {"Cati", "Molina",
-	 "Esqui", new Integer(18), new Boolean(false)},
-	 {"Juan", "Diaz",
-	 "Futbol", new Integer(22), new Boolean(true)},
-	 {"Susana", "Blanco",
-	 "Voleibol", new Integer(21), new Boolean(false)},
-	 {"Juana", "Pérez",
-	 "Natación", new Integer(22), new Boolean(true)},
-	 {"Luis", "Moreno",
-	 "Tenis", new Integer(19), new Boolean(false)}
-	 };*/
 	
 		public int getColumnCount() {
 		 return columnNames.length;
 		}
 	
-		/*public int getRowCount() {
-			return data.length;
-		}*/
+
 
 		public String getColumnName(int col) {
 			return columnNames[col];
 		}
 	
-		public Object getValueAt(int row, int col) {
-			return data[row][col];
-		}
-		@Override
-		public Object getValueAt(int row, int column)
-		{
-		    Cancion cancion = getPerson(row);
-		 
-		    switch (column)
-		    {
-		        case 0: return person.getFirstName();
-		        case 1: return person.getLastName();
-		        case 2: return person.getBirthDate();
-		        default: return null;
-		    }
-		}
+
 		/*
 		 * JTable usa este método para determinar el editor por defecto para cada celda.
 		 * Si no se implementa la última columna mostrará true/false en vez de un check
@@ -97,23 +79,14 @@ public class DemoTabla extends JPanel {
 			return getValueAt(0, c).getClass();
 		}
 	
-		/*
-		 * Este método no se implementa salvo que la tabla sea editable
-		 */
-		public boolean isCellEditable(int fila, int col) {
-			if (col < 2) {
-				return false;
-			} else {
-				return true;
-			}
-		}
+
 
 	
 		/*
 		 * Este método no se implementa salvo que el contenido de la tabla pueda
 		 * cambiar, lo que se notifica.
 		 */
-		public void setValueAt(Object valor, int fila, int col) {
+		/*public void setValueAt(Object valor, int fila, int col) {
 				 if (DEBUG) {
 					 System.out.println("Cambiar valor en " + fila + "," + col
 					 + " a " + valor
@@ -128,7 +101,7 @@ public class DemoTabla extends JPanel {
 				 }
 			}
 		private void printDebugData() {
-			 int numRows = getRowCount();
+			 int numRows = getRowCount1();
 			 int numCols = getColumnCount();
 			 for (int i=0; i < numRows; i++) {
 				 System.out.print(" fila " + i + ":");
@@ -138,13 +111,8 @@ public class DemoTabla extends JPanel {
 				 System.out.println();
 			 }
 			 System.out.println("--------------------------");
-		}
+		}*/
 
-		@Override
-		public int getRowCount() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
 		}
 }
 	
