@@ -18,7 +18,7 @@ public class TDSCancionDAO {
 	private static final String TITULO = "titulo";
 	private static final String INTERPRETE = "interprete";
 	private static final String GENERO = "genero";
-	private static final String RUTA_FICHERO = "ruta fichero";
+	//private static final String RUTA_FICHERO = "ruta fichero";
 	private static final String NUM_REPRODUCCIONES = "numero de reproducciones";
 	private static final String URL = "url";
 
@@ -34,12 +34,13 @@ public class TDSCancionDAO {
 		String titulo = servPersistencia.recuperarPropiedadEntidad(eCancion, TITULO);
 		String interprete = servPersistencia.recuperarPropiedadEntidad(eCancion, INTERPRETE);
 		String genero = servPersistencia.recuperarPropiedadEntidad(eCancion, GENERO);
-		String rutaFichero = servPersistencia.recuperarPropiedadEntidad(eCancion, RUTA_FICHERO);
+		//String rutaFichero = servPersistencia.recuperarPropiedadEntidad(eCancion, RUTA_FICHERO);
 		String numReproducciones = servPersistencia.recuperarPropiedadEntidad(eCancion, NUM_REPRODUCCIONES);
 		String url = servPersistencia.recuperarPropiedadEntidad(eCancion, URL);
 	
 	
-		Cancion cancion = new Cancion(titulo, interprete, genero, rutaFichero, Integer.parseInt(numReproducciones), url);
+		//Cancion cancion = new Cancion(titulo, interprete, genero, rutaFichero, Integer.parseInt(numReproducciones), url);
+		Cancion cancion = new Cancion(titulo, interprete, genero, Integer.parseInt(numReproducciones), url);
 		cancion.setId(eCancion.getId());
 		
 		
@@ -54,7 +55,7 @@ public class TDSCancionDAO {
 				new Propiedad(TITULO, cancion.getTitulo()),
 				new Propiedad(INTERPRETE, cancion.getInterprete()), 
 				new Propiedad(GENERO, cancion.getGenero()),
-				new Propiedad(RUTA_FICHERO, cancion.getRutaFichero()), 
+				//new Propiedad(RUTA_FICHERO, cancion.getRutaFichero()), 
 				new Propiedad(NUM_REPRODUCCIONES, String.valueOf(cancion.getNumReproducciones())),
 				new Propiedad(URL, cancion.getUrl()))));
 		return eCancion;

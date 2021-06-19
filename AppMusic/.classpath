@@ -38,5 +38,6 @@
 	<classpathentry kind="lib" path="C:/Users/Joaquín/git/tds/AppMusic/lib/multiplayer.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Joaquín/git/tds/AppMusic/lib/javafx-sdk-11.0.2"/>
 	<classpathentry kind="lib" path="C:/Users/Joaquín/git/tds/AppMusic/lib/javafx-sdk-11.0.2/lib/javafx.media.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Joaquín/Desktop/Uni/JavaBeans/CargadorCanciones.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

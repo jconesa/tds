@@ -20,6 +20,15 @@ public class Cancion {
 		this.url = url;
 	}
 	
+	public Cancion(String titulo, String interprete, String genero, int numReproducciones, String url) {
+		this.id = 0;
+		this.titulo = titulo;
+		this.interprete = interprete;
+		this.genero = genero;
+		this.numReproducciones = numReproducciones;
+		this.url = url;
+	}
+	
 	public int getId() {
 		return id;
 	}

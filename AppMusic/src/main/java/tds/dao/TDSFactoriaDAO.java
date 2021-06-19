@@ -17,4 +17,10 @@ public final class TDSFactoriaDAO extends FactoriaDAO {
 		return new TDSUsuarioDAO(); 
 	}
 
+	@Override
+	public TDSCancionDAO getCancionDAO() {
+		// TODO Auto-generated method stub
+		return new TDSCancionDAO();
+	}
+
 }

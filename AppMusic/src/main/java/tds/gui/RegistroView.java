@@ -76,7 +76,7 @@ public class RegistroView {
 		frmRegistro.getContentPane().setLayout(new BorderLayout());
 		frmRegistro.setResizable(false);
 		frmRegistro.getContentPane().setLayout(new BorderLayout());
-
+	
 		Container contentPane = frmRegistro.getContentPane();
 
 		JPanel datosPersonales = new JPanel();

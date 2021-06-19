@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -16,10 +17,11 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import tds.controlador.Controlador;
 import tds.dominio.Cancion;
+import tds.dominio.CatalogoCanciones;
 import tds.dominio.CatalogoUsuarios;
 import tds.dominio.Usuario;
 import tds.driver.ServicioPersistencia;
-import tds.dominio.Reproductor;
+import tds.gui.DemoTabla.MiTableModel;
 
 import java.awt.FlowLayout;
 import javax.swing.JButton;
@@ -130,7 +132,7 @@ public class VentanaPrincipal {
 		return panelCancion;
 	}
 	*/
-	private void crearTabla() {
+	/*private void crearTabla() {
 		tabla = new JTable();
 		tabla.setCellSelectionEnabled(false);
 		tabla.setShowGrid(true);
@@ -160,7 +162,7 @@ public class VentanaPrincipal {
 		columna.setPreferredWidth(250);
 		columna.setMinWidth(250);
 		columna.setMaxWidth(250);
-		} 
+		} */
 	
 	private JPanel crearPanelMedio() {
 		JPanel panelMedio = new JPanel();
@@ -284,7 +286,12 @@ public class VentanaPrincipal {
 		panelExplorarNorte.add(panelExplorarNorteC, BorderLayout.CENTER);
 		return panelExplorarNorte;
 	}
-	
+
+	public JPanel crearPanelExploraTabla() {
+		
+		DemoTabla panelExplorarTabla = new DemoTabla();
+		return panelExplorarTabla;
+	}
 	public JPanel crearPanelExploraSur() {
 		
 		JPanel panelSurPlay = new JPanel();
@@ -393,15 +400,16 @@ public class VentanaPrincipal {
 
 	}*/
 	
-	public JPanel crearPanelExplorar(JPanel panelExplorarNorte, JPanel panelExplorarSur) {
+	public JPanel crearPanelExplorar(JPanel panelExplorarNorte, JPanel panelExplorarSur, JPanel panelExplorarTabla) {
 		JPanel panelExplorar = new JPanel();
 		panelExplorar.setLayout(new BorderLayout(0, 0));
 		panelExplorar.add(panelExplorarNorte, BorderLayout.NORTH);
 		panelExplorar.add(panelExplorarSur, BorderLayout.SOUTH);
+		panelExplorar.add(panelExplorarTabla, BorderLayout.CENTER);
 		return panelExplorar;
 	}
-	
-	
+
+
 	
 	public void addManejadorBotonExplorar(JButton btnExplorar, JPanel panelMedio, JPanel panelExplorar) {
 		btnExplorar.addActionListener(new ActionListener() {
@@ -482,8 +490,9 @@ public class VentanaPrincipal {
 		
 		JPanel panelExplorarNorte = crearPanelExplorarNorte();
 		JPanel panelExplorarSur = crearPanelExploraSur();
+		JPanel panelExplorarTabla = crearPanelExploraTabla();
 		//JPanel panelExplorarCentro = crearPanelExplorarCentro();
-		JPanel panelExplorar = crearPanelExplorar(panelExplorarNorte, panelExplorarSur);
+		JPanel panelExplorar = crearPanelExplorar(panelExplorarNorte, panelExplorarSur, panelExplorarTabla);
 		//JPanel panelExplorar2 = crearPanelExplorar(panelExplorarCentro);
 		JPanel panelBotones = crearPanelBotones(panelMedio, panelExplorar);
 		//JPanel panelBotones2 = crearPanelBotones(panelMedio, panelExplorar2);

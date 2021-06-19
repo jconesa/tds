@@ -4,6 +4,7 @@ import tds.dao.UsuarioDAO;
 import tds.dao.CancionDAO;
 import tds.dao.DAOException;
 import tds.dao.FactoriaDAO;
+import tds.dao.TDSCancionDAO;
 import tds.dominio.Usuario;
 import tds.dominio.Cancion;
 import tds.dominio.CatalogoCanciones;
@@ -64,17 +65,37 @@ public final class Controlador {
 		return true;
 	}
 	
-	public boolean registrarCancion(String titulo, String interprete, String genero, String rutaFichero, int numReproducciones, String url) {
+	/*public boolean registrarCancion(String titulo, String interprete, String genero, String rutaFichero, int numReproducciones, String url) {
 
 		//Checkear si ya esta metida la canción
 		Cancion cancion = new Cancion(titulo, interprete, genero, rutaFichero, numReproducciones, url);
 
 		CancionDAO cancionDAO = factoria
+				.getCancionDAO(); /* Adaptador DAO para almacenar el nuevo Usuario en la BD 
+		cancionDAO.create(cancion);
+
+		CatalogoCanciones.getUnicaInstancia().addCancion(cancion);
+		return true;
+	}*/
+	
+	public boolean registrarCancion(String titulo, String interprete, String genero, int numReproducciones, String url) {
+
+		//Checkear si ya esta metida la canción
+		Cancion cancion = new Cancion(titulo, interprete, genero, numReproducciones, url);
+
+		TDSCancionDAO cancionDAO = factoria
 				.getCancionDAO(); /* Adaptador DAO para almacenar el nuevo Usuario en la BD */
 		cancionDAO.create(cancion);
 
 		CatalogoCanciones.getUnicaInstancia().addCancion(cancion);
 		return true;
+	}
+	public void registrarCancion2(String titulo, String interprete, String genero, int numReproducciones, String url) {
+
+		System.out.println(titulo);
+		System.out.println(genero);
+		System.out.println(numReproducciones);
+		System.out.println(url);
 	}
 	
 
