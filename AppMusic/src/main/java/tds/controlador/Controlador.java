@@ -1,6 +1,10 @@
 package tds.controlador;
 
 import tds.dao.UsuarioDAO;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import tds.dao.CancionDAO;
 import tds.dao.DAOException;
 import tds.dao.FactoriaDAO;
@@ -20,6 +24,7 @@ public final class Controlador {
 	private static Controlador unicaInstancia;
 	private FactoriaDAO factoria;
 	private Repro repro = new Repro();
+	private Cancion cancionActual;
 
 	private Controlador() {
 		usuarioActual = null;
@@ -96,10 +101,44 @@ public final class Controlador {
 	
 	public void playSong(String titulo) {
 		Cancion cancion = CatalogoCanciones.getUnicaInstancia().getCancion(titulo);
+		cancionActual = cancion;
 		System.out.println("LA CANCION ES");
 		System.out.println(cancion.getUrl());
 
 		repro.playCancion(cancion.getUrl());
+	}
+	
+	public void stopSong() {
+
+		repro.stopCancion();
+	}
+	
+	public void nextSong() throws DAOException {
+		System.out.println(cancionActual.getId());
+		List<Cancion> canciones = CatalogoCanciones.getUnicaInstancia().getCanciones();
+		int indice = canciones.indexOf(cancionActual);
+		if(canciones.size() <= indice+1) {
+			indice = 0;
+			this.playSong(canciones.get(indice).getTitulo());
+			return;
+		}
+		this.playSong(canciones.get(indice+1).getTitulo());
+		return;
+		/*for(int i = 0; i < canciones.size(); i++)
+		{
+			if(canciones.get(i).equals(cancionActual)) {
+				if(canciones.size() <= i+1)
+				{
+					i = 0;
+					this.playSong(canciones.get(i).getTitulo());
+					return;
+				}
+				this.playSong(canciones.get(i+1).getTitulo());
+				repro.playCancion(canciones.get(i+1).getTitulo());
+				return;
+			}
+		}*/
+		//repro.playCancion(cancionSiguiente.getUrl());
 	}
 
 	public boolean borrarUsuario(Usuario usuario) {

@@ -16,6 +16,7 @@ import beans.Entidad;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import tds.controlador.Controlador;
+import tds.dao.DAOException;
 import tds.dominio.Cancion;
 import tds.dominio.CatalogoCanciones;
 import tds.dominio.CatalogoUsuarios;
@@ -49,9 +50,9 @@ import javafx.scene.media.MediaPlayer;
 public class VentanaPrincipal {
 
 	private JFrame frmVentanaPrincipal;
-	private JTextField txtTtulo;
-	private JTextField txtIntrprete;
-	private JComboBox<String> generos;
+	private static JTextField txtTtulo;
+	private static JTextField txtIntrprete;
+	private static JComboBox<String> generos;
 	private Usuario usuarioActual = Controlador.getUnicaInstancia().getUsuarioActual();
 	JTable tabla;
 	DefaultTableModel modelo;
@@ -60,7 +61,17 @@ public class VentanaPrincipal {
 		initialize();
 	}
 
-
+	public static String getTitulo() {
+		return txtTtulo.getName();
+	}
+	
+	public static String getInterprete() {
+		return txtIntrprete.getName();
+	}
+	
+	public static String getGenero() {
+		return generos.getSelectedItem().toString();
+	}
 	public void mostrarVentana() {
 		frmVentanaPrincipal.setLocationRelativeTo(null);
 		frmVentanaPrincipal.setVisible(true);
@@ -332,6 +343,8 @@ public class VentanaPrincipal {
 
 		panelSurPlay.add(btnSiguiente, BorderLayout.EAST);
 		addManejadorBotonPlay(btnPlay, tabla);
+		addManejadorBotonStop(btnPause);
+		addManejadorBotonSiguiente(btnSiguiente);
 		
 		return panelSurPlay;
 	}
@@ -448,7 +461,38 @@ public class VentanaPrincipal {
 		});
 	}
 	
-
+	public void addManejadorBotonStop(JButton btnPlay) {
+		btnPlay.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Controlador.getUnicaInstancia().stopSong();
+		}
+		});
+	}
+	
+	public void addManejadorBotonSiguiente(JButton btnSiguiente) {
+		btnSiguiente.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				Controlador.getUnicaInstancia().nextSong();
+			} catch (DAOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		});
+	}
+	public void addManejadorBotonBuscar(JButton btnBuscar, DemoTabla panelExplorarTabla) {
+		btnBuscar.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JTable tabla = panelExplorarTabla.getTabla();
+            String titulo = (String) tabla.getValueAt(tabla.getSelectedRow(), 0);
+		}
+		});
+	}
+	
 	public void addManejadorBotonLogout(JButton btnLogout) {
 		btnLogout.addActionListener(new ActionListener() {
 			@Override

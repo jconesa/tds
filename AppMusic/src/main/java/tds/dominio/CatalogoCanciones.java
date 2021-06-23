@@ -40,6 +40,9 @@ public class CatalogoCanciones {
 		return new LinkedList<Cancion>(asistentesPorTitulo.values());
 	}
 	
+	public Cancion getIndice(int id) {
+		
+	}
 	public Cancion getCancion(String titulo) {
 		return asistentesPorTitulo.get(titulo);
 	}

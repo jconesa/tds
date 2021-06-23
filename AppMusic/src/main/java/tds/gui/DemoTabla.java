@@ -34,10 +34,10 @@ public class DemoTabla extends JPanel {
 
 		try {
 			for(Cancion cancion : CatalogoCanciones.getUnicaInstancia().getCanciones()) {
+				System.out.println(cancion.getId());
 				System.out.println(cancion.getTitulo());
 				System.out.println(cancion.getInterprete());
 				model.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete()});
-				//model.addRow(new Object[] { "hola", "adios" });
 			}
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
@@ -68,7 +68,54 @@ public class DemoTabla extends JPanel {
 		public String getColumnName(int col) {
 			return columnNames[col];
 		}
-	
+		public LinkedList<Cancion> aplicarFiltro(LinkedList<Cancion> listaCanciones){
+			LinkedList<Cancion> listaCancionesFiltrada = new LinkedList<Cancion>();
+			
+			// Interprete y titulo vacios
+			if(VentanaPrincipal.getInterprete().isEmpty() && VentanaPrincipal.getTitulo().isEmpty()) {
+				String genero = VentanaPrincipal.getGenero();
+				for(Cancion cancion : listaCanciones) {
+					if(genero.equals(cancion.getGenero())) {
+						listaCancionesFiltrada.add(cancion);
+					}
+				}
+			}
+			// Con interprete y genero, titulo vacio
+			if(!VentanaPrincipal.getInterprete().isEmpty() && VentanaPrincipal.getTitulo().isEmpty()) {
+				String genero = VentanaPrincipal.getGenero();
+				String interprete = VentanaPrincipal.getInterprete();
+				for(Cancion cancion : listaCanciones) {
+					if(genero.equals(cancion.getGenero()) && interprete.equals(cancion.getInterprete())) {
+						listaCancionesFiltrada.add(cancion);
+					}
+				}
+			}
+			
+			// Sin interprete, con titulo y género
+			if(VentanaPrincipal.getInterprete().isEmpty() && !VentanaPrincipal.getTitulo().isEmpty()) {
+				String genero = VentanaPrincipal.getGenero();
+				String titulo = VentanaPrincipal.getTitulo();
+				for(Cancion cancion : listaCanciones) {
+					if(genero.equals(cancion.getGenero()) && titulo.equals(cancion.getTitulo())) {
+						listaCancionesFiltrada.add(cancion);
+					}
+				}
+			}
+			// Con todo
+			if(!VentanaPrincipal.getInterprete().isEmpty() && !VentanaPrincipal.getTitulo().isEmpty()) {
+				String genero = VentanaPrincipal.getGenero();
+				String titulo = VentanaPrincipal.getTitulo();
+				String interprete = VentanaPrincipal.getInterprete();
+				for(Cancion cancion : listaCanciones) {
+					if(genero.equals(cancion.getGenero()) && interprete.equals(cancion.getInterprete()) && titulo.equals(cancion.getTitulo()) ) {
+						listaCancionesFiltrada.add(cancion);
+					}
+				}
+			}
+			
+			return listaCancionesFiltrada;
+			
+		}
 
 		/*
 		 * JTable usa este método para determinar el editor por defecto para cada celda.
