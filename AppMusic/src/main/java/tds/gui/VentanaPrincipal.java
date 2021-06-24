@@ -23,12 +23,14 @@ import tds.dominio.CatalogoUsuarios;
 import tds.dominio.Usuario;
 import tds.driver.ServicioPersistencia;
 import tds.gui.DemoTabla.MiTableModel;
+import vista.Constantes;
 
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.LinkedList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -41,6 +43,7 @@ import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 
 import java.io.File;
 import javafx.scene.media.Media;
@@ -54,8 +57,8 @@ public class VentanaPrincipal {
 	private static JTextField txtIntrprete;
 	private static JComboBox<String> generos;
 	private Usuario usuarioActual = Controlador.getUnicaInstancia().getUsuarioActual();
+	private DefaultTableModel modelo;
 	JTable tabla;
-	DefaultTableModel modelo;
 
 	public VentanaPrincipal() {
 		initialize();
@@ -103,6 +106,44 @@ public class VentanaPrincipal {
 		return panel1;
 	}
 	
+	private void crearTabla() {
+		tabla= new JTable();
+		//tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tabla.setCellSelectionEnabled(false);
+		tabla.setShowGrid(true);
+		tabla.setShowVerticalLines(true);
+		tabla.setGridColor(Color.gray);
+
+		modelo = new DefaultTableModel() {
+			private String[] columnNames = {"Titulo","Interprete"};
+			public String getColumnName(int column) {
+			    return columnNames[column];
+			}
+		    public int getColumnCount() {return 2;}
+		    public boolean isCellEditable(int row, int col){ return false;}
+		};
+		tabla.setModel(modelo);
+		try {
+			for(Cancion cancion : CatalogoCanciones.getUnicaInstancia().getCanciones()) {
+				System.out.println(cancion.getId());
+				System.out.println(cancion.getTitulo());
+				System.out.println(cancion.getInterprete());
+				modelo.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete()});
+			}
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		TableColumn columna = tabla.getColumn("Titulo"); 
+		columna.setPreferredWidth(70);
+		columna.setMinWidth(70);
+		columna.setMaxWidth(70);
+		columna = tabla.getColumn("Interprete"); 
+		columna.setPreferredWidth(150);
+		columna.setMinWidth(150);
+		columna.setMaxWidth(150);
+
+	}
 
 	/*private JPanel crearPanelCancion(JPanel panelMedio, JPanel panelBotones) {
 		JPanel panelCancion = new JPanel();
@@ -271,6 +312,7 @@ public class VentanaPrincipal {
 
 		generos = new JComboBox<String>();
 		generos.setEditable(true);
+		generos.addItem("Todos");
 		generos.addItem("Bolero");
 		generos.addItem("Cantautor");
 		generos.addItem("Clásica");
@@ -280,6 +322,8 @@ public class VentanaPrincipal {
 		generos.addItem("Pop");
 		generos.addItem("Rock");
 		generos.addItem("Romántica");
+		generos.addItem("Folk");
+		generos.addItem("Tango");
 		panelExplorarNorteN.add(generos, BorderLayout.NORTH);
 		
 		JButton btnBuscar = new JButton("Buscar");
@@ -295,16 +339,30 @@ public class VentanaPrincipal {
 		
 		panelExplorarNorte.add(panelExplorarNorteN, BorderLayout.NORTH);
 		panelExplorarNorte.add(panelExplorarNorteC, BorderLayout.CENTER);
+		
+		addManejadorBotonBuscar(btnBuscar);
 		return panelExplorarNorte;
 	}
-
-	public DemoTabla crearPanelExploraTabla() {
+	private void fixedSize(JComponent c,int x, int y) {
+		c.setMinimumSize(new Dimension(x,y));
+		c.setMaximumSize(new Dimension(x,y));
+		c.setPreferredSize(new Dimension(x,y));
+	}
+	public JPanel crearPanelExplorarTabla() {
+		JPanel panelExplorarTabla = new JPanel();
+		panelExplorarTabla.setLayout(new BorderLayout(0, 0));
+		crearTabla();
+		JScrollPane tablaConScroll= new JScrollPane(tabla);
+		panelExplorarTabla.add(tablaConScroll);
+		fixedSize(tablaConScroll,100,100);
 		
-		DemoTabla panelExplorarTabla = new DemoTabla();
+		
 		return panelExplorarTabla;
+
+		
 	}
 	
-	public JPanel crearPanelExploraSur(DemoTabla tabla) {
+	public JPanel crearPanelExploraSur(JPanel tabla) {
 		
 		JPanel panelSurPlay = new JPanel();
 		panelSurPlay.setLayout(new BorderLayout(0, 0));
@@ -450,11 +508,11 @@ public class VentanaPrincipal {
 		});
 	}
 	
-	public void addManejadorBotonPlay(JButton btnPlay, DemoTabla panelExplorarTabla) {
+	public void addManejadorBotonPlay(JButton btnPlay, JPanel panelExplorarTabla) {
 		btnPlay.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JTable tabla = panelExplorarTabla.getTabla();
+		
             String titulo = (String) tabla.getValueAt(tabla.getSelectedRow(), 0);
 			Controlador.getUnicaInstancia().playSong(titulo);
 		}
@@ -483,12 +541,28 @@ public class VentanaPrincipal {
 		}
 		});
 	}
-	public void addManejadorBotonBuscar(JButton btnBuscar, DemoTabla panelExplorarTabla) {
+	
+	private void clearTable()
+	{
+	    modelo.setRowCount(0);
+	}
+	public void addManejadorBotonBuscar(JButton btnBuscar) {
 		btnBuscar.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JTable tabla = panelExplorarTabla.getTabla();
-            String titulo = (String) tabla.getValueAt(tabla.getSelectedRow(), 0);
+			clearTable();
+			LinkedList<Cancion> canciones;
+			try {
+				canciones = (LinkedList<Cancion>) CatalogoCanciones.getUnicaInstancia().getCanciones();
+				LinkedList<Cancion> cancionesFiltradas = aplicarFiltro(canciones);
+				for(Cancion cancion : cancionesFiltradas) {
+					modelo.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete()});
+				}
+				
+			} catch (DAOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		});
 	}
@@ -524,7 +598,7 @@ public class VentanaPrincipal {
 		JPanel panelMedio = crearPanelMedio();
 		
 		JPanel panelExplorarNorte = crearPanelExplorarNorte();
-		DemoTabla panelExplorarTabla = crearPanelExploraTabla();
+		JPanel panelExplorarTabla = crearPanelExplorarTabla();
 		JPanel panelExplorarSur = crearPanelExploraSur(panelExplorarTabla);
 
 		//JPanel panelExplorarCentro = crearPanelExplorarCentro();
