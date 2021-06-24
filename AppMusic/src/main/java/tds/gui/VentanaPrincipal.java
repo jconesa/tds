@@ -154,7 +154,7 @@ public class VentanaPrincipal {
 		tablaPlaylist.setShowVerticalLines(true);
 		tablaPlaylist.setGridColor(Color.gray);
 
-		modelo = new DefaultTableModel() {
+		modeloPlaylist = new DefaultTableModel() {
 			private String[] columnNames = {"Titulo","Interprete", "Genero"};
 			public String getColumnName(int column) {
 			    return columnNames[column];
@@ -643,7 +643,7 @@ public class VentanaPrincipal {
 				canciones = (LinkedList<Cancion>) CatalogoCanciones.getUnicaInstancia().getCanciones();
 				LinkedList<Cancion> cancionesFiltradas = aplicarFiltro(canciones);
 				for(Cancion cancion : cancionesFiltradas) {
-					modelo.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete()});
+					modelo.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero(), cancion.getNumReproducciones()});
 				}
 				
 			} catch (DAOException e1) {
