@@ -1,8 +1,13 @@
 package tds.dao;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import beans.Entidad;
+import beans.Propiedad;
 import tds.dominio.Cancion;
 import tds.dominio.ListaCanciones;
+import tds.dominio.Usuario;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 
@@ -24,6 +29,8 @@ public class TDSListaCancionesDAO {
 	private TDSListaCancionesDAO() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
+	
+
 	
 	public void addCancion(Cancion cancion) {
 		Entidad eCancion = new Entidad();

@@ -168,7 +168,7 @@ public class LoginView {
 					VentanaPrincipal window = new VentanaPrincipal();
 					window.mostrarVentana();
 					frmLogin.dispose();
-				} else
+				} else 
 					JOptionPane.showMessageDialog(frmLogin, "Nombre de usuario o contraseña no valido",
 							"Error", JOptionPane.ERROR_MESSAGE);
 			}
