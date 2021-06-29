@@ -13,7 +13,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import beans.Entidad;
-import controlador.ControladorTienda;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import tds.controlador.Controlador;
@@ -62,13 +61,16 @@ public class VentanaPrincipal {
 	private static JComboBox<String> generos2;
     private static JTextField nombrePlaylist;
 
+    
+    private PanelPlaylist panelPlaylist;
+    private JPanel panelMedio;
 	private Usuario usuarioActual = Controlador.getUnicaInstancia().getUsuarioActual();
 	private DefaultTableModel modelo;
-	private DefaultTableModel modelo2;
-	private DefaultTableModel modeloPlaylist;
+//	private DefaultTableModel modelo2;
+//	private DefaultTableModel modeloPlaylist;
 	JTable tabla;
-	JTable tabla2;
-	JTable tablaPlaylist;
+//	JTable tabla2;
+//	JTable tablaPlaylist;
 
 	public VentanaPrincipal() {
 		initialize();
@@ -156,7 +158,7 @@ public class VentanaPrincipal {
 
 	}
 	
-	private void crearTabla2() {
+/*	private void crearTabla2() {
 		tabla2= new JTable();
 		//tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabla2.setCellSelectionEnabled(false);
@@ -216,17 +218,17 @@ public class VentanaPrincipal {
 	
 		//Se inicializa por defecto con todas las canciones, no con las deseadas
 		
-			/*try {
+			try {
 				for(Cancion cancion : CatalogoCanciones.getUnicaInstancia().getCanciones()) {;
 				modeloPlaylist.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero()});
 				}
 			} catch (DAOException e) {
 			// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
+			}
 	
 
-		}
+		}*/
 		
 	/*private JPanel crearPanelCancion(JPanel panelMedio, JPanel panelBotones) {
 		JPanel panelCancion = new JPanel();
@@ -307,7 +309,7 @@ public class VentanaPrincipal {
 		
 		return panelMedio;
 	}
-	private JPanel crearPanelBotones(JPanel panelMedio, JPanel panelExplorar, JPanel panelNuevaLista) {
+	private JPanel crearPanelBotones(JPanel panelMedio, JPanel panelExplorar) {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.WHITE);
 		frmVentanaPrincipal.getContentPane().add(panel_1, BorderLayout.WEST);
@@ -370,7 +372,7 @@ public class VentanaPrincipal {
 		panel_1.add(btnListas);
 		
 		addManejadorBotonExplorar(btnExplorar, panelMedio, panelExplorar);
-		addManejadorBotonNuevaLista(btnNuevaLista,panelMedio,panelNuevaLista);
+		addManejadorBotonNuevaLista(btnNuevaLista);
 				
 		return panel_1;
 		
@@ -482,7 +484,7 @@ public class VentanaPrincipal {
 		return panelExplorarNortee;
 	}
 	
-	public JPanel crearPanelNuevaListaTablas() {
+/*	public JPanel crearPanelNuevaListaTablas() {
 		JPanel panelNuevaListaTablas = new JPanel();
 		JPanel panelNuevaListaIzquierda = new JPanel();
 		JPanel panelNuevaListarPlaylist = new JPanel();
@@ -526,14 +528,12 @@ public class VentanaPrincipal {
         panelNuevaListaTablas.add(panelCrearPlaylist, BorderLayout.SOUTH);
 		
         addManejadorBotonCrearPlaylist(crearPlaylist);
-        addManejadorBotonAddCancionPlaylist(addCancion);
-        addManejadorBotonRemoveCancionPlaylist(quitarCancion);
 		return panelNuevaListaTablas;
 
 		
-	}
+	}*/
 	
-	public JPanel crearPanelNorteCentro(JPanel panelNuevaListaNorte, JPanel panelNuevaListaTablas) {
+	public JPanel crearPanelNorteCentro(JPanel panelNuevaListaNorte) {
 		JPanel panelNuevaLista = new JPanel();
 		panelNuevaLista.add(panelNuevaListaNorte, BorderLayout.NORTH);
 		panelNuevaLista.add(panelNuevaListaTablas, BorderLayout.CENTER);
@@ -847,14 +847,18 @@ public class VentanaPrincipal {
 		});
 	}
 	
-	public void addManejadorBotonNuevaLista(JButton btnNuevaLista, JPanel panelMedio, JPanel panelNuevaLista) {
+	public void addManejadorBotonNuevaLista(JButton btnNuevaLista) {
 		btnNuevaLista.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				panelMedio.removeAll();
-				panelMedio.add(panelNuevaLista);
+				panelMedio.add(panelPlaylist);
 				panelMedio.revalidate();
 				panelMedio.repaint();
+				panelPlaylist.setVisible(true);
+				panelMedio.setVisible(true);
+				/*frmVentanaPrincipal.setContentPane(panelPlaylist);
+				frmVentanaPrincipal.validate();*/
 				}
 		});
 	}
@@ -968,88 +972,7 @@ public class VentanaPrincipal {
 			}
 		});
 	}
-	public void addManejadorBotonCrearPlaylist(JButton btnCrear) {
-        btnCrear.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	// Hacerlo con objetos o con la bd?
-            	boolean existe = false;
-            	List<ListaCanciones> listasUsuario = usuarioActual.getListasCanciones();
-            	for(ListaCanciones lista : listasUsuario) {
-            		if(lista.getNombre().equals(nombrePlaylist.getText())){
-            			existe = true;
-            		}
-            	}
-            	
-            	if(existe) {
-            		
-            	} else {
-            		int reply = JOptionPane.showConfirmDialog(null, "¿Desea crear una nueva lista?", "Crear nueva lista", JOptionPane.YES_NO_OPTION);
-            		if (reply == JOptionPane.YES_OPTION) {
-            			Controlador.getUnicaInstancia().registrarListaCanciones(nombrePlaylist.getText(), usuarioActual.getLogin());
-            			JOptionPane.showMessageDialog(frmVentanaPrincipal,
-            					"Venta registrada correctamente",
-            					"Crear venta",JOptionPane.PLAIN_MESSAGE);
-            			
-            			
-            			
-            			//while(modelo.getRowCount()>0) modelo.removeRow(0);
-            			//unidades.setText("");
-            			//dni.setText("");
-            			Controlador.getUnicaInstancia().crearListaCanciones();
-            		} else {
-            		    //JOptionPane.showMessageDialog(null, "GOODBYE");
-            		}
-            	}
-            
-            }
-        });
-    }
-	public void addManejadorBotonAddCancionPlaylist(JButton btnAdd) {
-        btnAdd.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	//LinkedList<Cancion> canciones = CatalogoCanciones.getUnicaInstancia().getCanciones();
-            	ListaCanciones playList = Controlador.getUnicaInstancia().getListaActual();
-            	//LinkedList<Cancion> playList = new LinkedList<Cancion>();
-            	int indice = tabla2.getSelectedRow();
-                String titulo = (String) tabla2.getValueAt(tabla2.getSelectedRow(), 0);
-                Cancion cancion = CatalogoCanciones.getUnicaInstancia().getCancion(titulo);
-  
-                modelo2.removeRow(indice);
-				modeloPlaylist.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero()});
-				playList.addCancion(cancion);
-                
-            }
-        });
-    }
-// xd
-	public void addManejadorBotonRemoveCancionPlaylist(JButton btnRemove) {
-        btnRemove.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	//LinkedList<Cancion> canciones = CatalogoCanciones.getUnicaInstancia().getCanciones();
-            	
-            	LinkedList<Cancion> playList = new LinkedList<Cancion>();
-            	int indice = tablaPlaylist.getSelectedRow();
-                String titulo = (String) tablaPlaylist.getValueAt(tablaPlaylist.getSelectedRow(), 0);
-                Cancion cancion = CatalogoCanciones.getUnicaInstancia().getCancion(titulo);
-  
-                modeloPlaylist.removeRow(indice);
-				modelo2.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero(), cancion.getNumReproducciones()});
-				playList.remove(cancion);
-                
-            }
-        });
-    }
-    public void addManejadorBotonQuitarCancionPlaylist(JButton btnQuitar) {
-        btnQuitar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-            }
-        });
-    }
 
 	
 	public void initialize() {
@@ -1066,27 +989,33 @@ public class VentanaPrincipal {
 		
 		JPanel panel1 = crearPanel1();
 		
-		JPanel panelMedio = crearPanelMedio();
+		panelMedio = crearPanelMedio();
 		
 		JPanel panelExplorarNorte = crearPanelExplorarNorte();
 
 		JPanel panelNuevaListaNorte = crearPanelExplorarNorte2();
 		JPanel panelExplorarTabla = crearPanelExplorarTabla();
-		JPanel panelNuevaListaTablas = crearPanelNuevaListaTablas(); //Dos listas juntas
+		//JPanel panelNuevaListaTablas = crearPanelNuevaListaTablas(); //Dos listas juntas
 		JPanel panelExplorarSur = crearPanelExploraSur(panelExplorarTabla);
 
 		//JPanel panelExplorarCentro = crearPanelExplorarCentro();
 		JPanel panelExplorar = crearPanelExplorar(panelExplorarNorte, panelExplorarSur, panelExplorarTabla);
-		
-		JPanel panelNuevaLista= crearPanelNorteCentro(panelNuevaListaNorte, panelNuevaListaTablas);
+		panelPlaylist =  new PanelPlaylist(frmVentanaPrincipal);
+
+		//JPanel panelNuevaLista= crearPanelNorteCentro(panelNuevaListaNorte);
 		//JPanel panelExplorar2 = crearPanelExplorar(panelExplorarCentro);
-		JPanel panelBotones = crearPanelBotones(panelMedio, panelExplorar, panelNuevaLista);
+		JPanel panelBotones = crearPanelBotones(panelMedio, panelExplorar);
 		//JPanel panelBotones2 = crearPanelBotones(panelMedio, panelExplorar2);
 
 		frmVentanaPrincipal.pack();
 	}
 
 }
+
+
+
+
+
 
 
 

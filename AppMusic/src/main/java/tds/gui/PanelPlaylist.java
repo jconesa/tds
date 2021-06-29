@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -32,17 +33,17 @@ public class PanelPlaylist extends JPanel {
 
     private JFrame frmVentanaPrincipal;
 	private DefaultTableModel modelo, modeloPlaylist;
-	JTable tabla, tablaPlaylist, panelNuevaListaPlaylist;
-    private VentanaPrincipal ventana;
-    JPanel panelNuevaListaTablas, panelNuevaListaIzquierda, panelNuevaListarPlaylist, panelCrearPlaylist, botones;
+	JTable tabla, tablaPlaylist;
+    private JFrame ventana;
+    JPanel panelNuevaListaTablas, panelNuevaListaIzquierda, panelNuevaListaPlaylist, panelCrearPlaylist, botones;
     JButton crearPlaylist, addCancion, quitarCancion;
     JScrollPane tablaConScroll, tablaPlaylistConScroll;
 	private Usuario usuarioActual = Controlador.getUnicaInstancia().getUsuarioActual();
 
     
     
-    public void PanelCrearPlaylist(VentanaPrincipal v) {
-    	ventana= v;
+    public PanelPlaylist(JFrame ventanaPrincipal) {
+    	ventana= ventanaPrincipal;
     	crearPantalla();
     }
 	
@@ -77,18 +78,115 @@ public class PanelPlaylist extends JPanel {
 		
 		crearTablaPlaylist();
 		tablaPlaylistConScroll= new JScrollPane(tablaPlaylist);
-		panelNuevaListaPlaylist = new JTable();
-		panelNuevaListarPlaylist.add(tablaPlaylistConScroll);
+		panelNuevaListaPlaylist = new JPanel();
+		panelNuevaListaPlaylist.add(tablaPlaylistConScroll);
 		
 		panelNuevaListaTablas = new JPanel();
 		panelNuevaListaTablas.add(panelNuevaListaIzquierda, BorderLayout.WEST);
         panelNuevaListaTablas.add(botones, BorderLayout.CENTER);
-		panelNuevaListaTablas.add(panelNuevaListarPlaylist, BorderLayout.EAST);
+		panelNuevaListaTablas.add(panelNuevaListaPlaylist, BorderLayout.EAST);
         panelNuevaListaTablas.add(panelCrearPlaylist, BorderLayout.SOUTH);
         
         addManejadorBotonCrearPlaylist(crearPlaylist);
+        addManejadorBotonAddCancionPlaylist(addCancion);
+        addManejadorBotonRemoveCancionPlaylist(quitarCancion);
 		return panelNuevaListaTablas;
     }
+    
+	public LinkedList<Cancion> aplicarFiltro(LinkedList<Cancion> listaCanciones){
+		LinkedList<Cancion> listaCancionesFiltrada = new LinkedList<Cancion>();
+		
+		/*// Interprete y titulo vacios
+		if(txtIntrprete.getText().isEmpty() && txtTtulo.getText().isEmpty()) {
+			String genero = generos.getSelectedItem().toString();
+			for(Cancion cancion : listaCanciones) {
+				if(genero.equals(cancion.getGenero())) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}*/
+
+		// Solo título
+		if(txtIntrprete.getText().isEmpty() && !txtTtulo.getText().isEmpty() && generos.getSelectedItem().equals("")) {
+			String titulo = txtTtulo.getText();
+			for(Cancion cancion : listaCanciones) {
+				if( titulo.equals(cancion.getTitulo())) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}
+		
+		// Solo intérprete
+		if(!txtIntrprete.getText().isEmpty() && txtTtulo.getText().isEmpty() && generos.getSelectedItem().equals("")) {
+			String interprete = txtIntrprete.getText();
+			for(Cancion cancion : listaCanciones) {
+				if( interprete.equals(cancion.getInterprete())) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}
+		
+		// Solo intérprete
+		if(txtIntrprete.getText().isEmpty() && txtTtulo.getText().isEmpty() && !generos.getSelectedItem().equals("")) {
+			String genero = generos.getSelectedItem().toString();
+			for(Cancion cancion : listaCanciones) {
+				if( genero.equals(cancion.getGenero())) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}
+		// Sin interprete, con titulo y género
+		if(txtIntrprete.getText().isEmpty() && !txtTtulo.getText().isEmpty()) {
+			String genero = generos.getSelectedItem().toString();
+			String titulo = txtTtulo.getText();
+			for(Cancion cancion : listaCanciones) {
+				if(genero.equals(cancion.getGenero()) && titulo.equals(cancion.getTitulo())) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}
+		
+		//Con titulo e interprete
+		if(!txtIntrprete.getText().isEmpty() && !txtTtulo.getText().isEmpty() && generos.getSelectedItem().equals("")) {
+			String titulo = txtTtulo.getText();
+			String interprete = txtIntrprete.getText();
+			for(Cancion cancion : listaCanciones) {
+				if(titulo.equals(cancion.getTitulo()) && interprete.equals(cancion.getInterprete())) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}
+		
+		// Con interprete y genero, titulo vacio
+		if(!txtIntrprete.getText().isEmpty() && txtTtulo.getText().isEmpty()) {
+			String genero = generos.getSelectedItem().toString();
+			String interprete = txtIntrprete.getText();
+			for(Cancion cancion : listaCanciones) {
+				if(genero.equals(cancion.getGenero()) && interprete.equals(cancion.getInterprete())) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}
+		
+		// Con todo
+		if(!txtIntrprete.getText().isEmpty() && !txtTtulo.getText().isEmpty()) {
+			String genero = generos.getSelectedItem().toString();
+			String titulo = txtTtulo.getText();
+			String interprete = txtIntrprete.getText();
+			for(Cancion cancion : listaCanciones) {
+				if(genero.equals(cancion.getGenero()) && interprete.equals(cancion.getInterprete()) && titulo.equals(cancion.getTitulo()) ) {
+					listaCancionesFiltrada.add(cancion);
+				}
+			}
+		}
+		
+		if(txtIntrprete.getText().isEmpty() && txtTtulo.getText().isEmpty() && generos.getSelectedItem().equals("")) {
+			return listaCanciones;
+		}
+		
+		return listaCancionesFiltrada;
+		
+	}
     
 	public void crearTablaPlaylist() {
 		tablaPlaylist= new JTable();
@@ -121,6 +219,7 @@ public class PanelPlaylist extends JPanel {
 	
 
 		}
+	
 	
 	private void crearTabla() {
 		tabla= new JTable();
@@ -162,6 +261,10 @@ public class PanelPlaylist extends JPanel {
 
 	}
 	
+	private void clearTable()
+	{
+	    modelo.setRowCount(0);
+	}
 	public void cargarPlaylist() {
 	//	List<Playlist> listaPlaylist = Controlador.getUnicaInstancia().getPlaylist();
 	//for
@@ -197,6 +300,64 @@ public class PanelPlaylist extends JPanel {
             		    //JOptionPane.showMessageDialog(null, "GOODBYE");
             		}
             	}
+                
+            }
+        });
+    }
+	public void addManejadorBotonBuscar(JButton btnBuscar) {
+		btnBuscar.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			clearTable();
+			LinkedList<Cancion> canciones;
+			try {
+				canciones = (LinkedList<Cancion>) CatalogoCanciones.getUnicaInstancia().getCanciones();
+				LinkedList<Cancion> cancionesFiltradas = aplicarFiltro(canciones);
+				for(Cancion cancion : cancionesFiltradas) {
+					modelo.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero(), cancion.getNumReproducciones()});
+				}
+				
+			} catch (DAOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		});
+	}
+		
+	public void addManejadorBotonAddCancionPlaylist(JButton btnAdd) {
+        btnAdd.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	//LinkedList<Cancion> canciones = CatalogoCanciones.getUnicaInstancia().getCanciones();
+            	ListaCanciones playList = Controlador.getUnicaInstancia().getListaActual();
+            	//LinkedList<Cancion> playList = new LinkedList<Cancion>();
+            	int indice = tabla.getSelectedRow();
+                String titulo = (String) tabla.getValueAt(tabla.getSelectedRow(), 0);
+                Cancion cancion = CatalogoCanciones.getUnicaInstancia().getCancion(titulo);
+  
+                modelo.removeRow(indice);
+				modeloPlaylist.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero()});
+				playList.addCancion(cancion);
+                
+            }
+        });
+    }
+// xd
+	public void addManejadorBotonRemoveCancionPlaylist(JButton btnRemove) {
+        btnRemove.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	//LinkedList<Cancion> canciones = CatalogoCanciones.getUnicaInstancia().getCanciones();
+            	
+            	LinkedList<Cancion> playList = new LinkedList<Cancion>();
+            	int indice = tablaPlaylist.getSelectedRow();
+                String titulo = (String) tablaPlaylist.getValueAt(tablaPlaylist.getSelectedRow(), 0);
+                Cancion cancion = CatalogoCanciones.getUnicaInstancia().getCancion(titulo);
+  
+                modeloPlaylist.removeRow(indice);
+				modelo.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero(), cancion.getNumReproducciones()});
+				playList.remove(cancion);
                 
             }
         });
