@@ -216,14 +216,14 @@ public class VentanaPrincipal {
 	
 		//Se inicializa por defecto con todas las canciones, no con las deseadas
 		
-			try {
+			/*try {
 				for(Cancion cancion : CatalogoCanciones.getUnicaInstancia().getCanciones()) {;
 				modeloPlaylist.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero()});
 				}
 			} catch (DAOException e) {
 			// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 	
 
 		}
@@ -526,6 +526,8 @@ public class VentanaPrincipal {
         panelNuevaListaTablas.add(panelCrearPlaylist, BorderLayout.SOUTH);
 		
         addManejadorBotonCrearPlaylist(crearPlaylist);
+        addManejadorBotonAddCancionPlaylist(addCancion);
+        addManejadorBotonRemoveCancionPlaylist(quitarCancion);
 		return panelNuevaListaTablas;
 
 		
@@ -988,6 +990,9 @@ public class VentanaPrincipal {
             			JOptionPane.showMessageDialog(frmVentanaPrincipal,
             					"Venta registrada correctamente",
             					"Crear venta",JOptionPane.PLAIN_MESSAGE);
+            			
+            			
+            			
             			//while(modelo.getRowCount()>0) modelo.removeRow(0);
             			//unidades.setText("");
             			//dni.setText("");
@@ -996,7 +1001,7 @@ public class VentanaPrincipal {
             		    //JOptionPane.showMessageDialog(null, "GOODBYE");
             		}
             	}
-                
+            
             }
         });
     }
@@ -1005,20 +1010,38 @@ public class VentanaPrincipal {
             @Override
             public void actionPerformed(ActionEvent e) {
             	//LinkedList<Cancion> canciones = CatalogoCanciones.getUnicaInstancia().getCanciones();
-            	ListaCanciones playList = ne
-            	LinkedList<Cancion> playList = new LinkedList<Cancion>();
+            	ListaCanciones playList = Controlador.getUnicaInstancia().getListaActual();
+            	//LinkedList<Cancion> playList = new LinkedList<Cancion>();
             	int indice = tabla2.getSelectedRow();
                 String titulo = (String) tabla2.getValueAt(tabla2.getSelectedRow(), 0);
                 Cancion cancion = CatalogoCanciones.getUnicaInstancia().getCancion(titulo);
   
                 modelo2.removeRow(indice);
-				modeloPlaylist.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero(), cancion.getNumReproducciones()});
-				playList.add(cancion);
+				modeloPlaylist.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero()});
+				playList.addCancion(cancion);
                 
             }
         });
     }
 
+	public void addManejadorBotonRemoveCancionPlaylist(JButton btnRemove) {
+        btnRemove.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	//LinkedList<Cancion> canciones = CatalogoCanciones.getUnicaInstancia().getCanciones();
+            	
+            	LinkedList<Cancion> playList = new LinkedList<Cancion>();
+            	int indice = tablaPlaylist.getSelectedRow();
+                String titulo = (String) tablaPlaylist.getValueAt(tablaPlaylist.getSelectedRow(), 0);
+                Cancion cancion = CatalogoCanciones.getUnicaInstancia().getCancion(titulo);
+  
+                modeloPlaylist.removeRow(indice);
+				modelo2.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero(), cancion.getNumReproducciones()});
+				playList.remove(cancion);
+                
+            }
+        });
+    }
     public void addManejadorBotonQuitarCancionPlaylist(JButton btnQuitar) {
         btnQuitar.addActionListener(new ActionListener() {
             @Override

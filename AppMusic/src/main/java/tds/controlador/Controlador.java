@@ -6,9 +6,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import modelo.Cliente;
-import modelo.Venta;
-import persistencia.IAdaptadorVentaDAO;
 import tds.dao.CancionDAO;
 import tds.dao.DAOException;
 import tds.dao.FactoriaDAO;
@@ -54,6 +51,10 @@ public final class Controlador {
 
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
+	}
+	
+	public ListaCanciones getListaActual() {
+		return listaActual;
 	}
 
 	public boolean esUsuarioRegistrado(String login) {

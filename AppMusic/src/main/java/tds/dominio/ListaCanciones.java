@@ -47,6 +47,10 @@ public class ListaCanciones {
 		return listaCanciones.add(cancion);
 	}
 	
+	public void removeCancion(Cancion cancion) {
+		listaCanciones.remove(cancion);
+	}
+	
 	public List<Cancion> getListaCanciones() {
 		return Collections.unmodifiableList(listaCanciones);
 	}
