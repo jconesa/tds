@@ -13,10 +13,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import beans.Entidad;
+import controlador.ControladorTienda;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import tds.controlador.Controlador;
 import tds.dao.DAOException;
+import tds.dao.TDSListaCancionesDAO;
 import tds.dominio.Cancion;
 import tds.dominio.CatalogoCanciones;
 import tds.dominio.CatalogoUsuarios;
@@ -58,6 +60,8 @@ public class VentanaPrincipal {
 	private static JTextField txtTtulo2;
 	private static JTextField txtIntrprete2;
 	private static JComboBox<String> generos2;
+    private static JTextField nombrePlaylist;
+
 	private Usuario usuarioActual = Controlador.getUnicaInstancia().getUsuarioActual();
 	private DefaultTableModel modelo;
 	private DefaultTableModel modelo2;
@@ -482,9 +486,21 @@ public class VentanaPrincipal {
 		JPanel panelNuevaListaTablas = new JPanel();
 		JPanel panelNuevaListaIzquierda = new JPanel();
 		JPanel panelNuevaListarPlaylist = new JPanel();
+        JPanel panelCrearPlaylist = new JPanel();
+        
 		JPanel botones = new JPanel();
 	    botones.setLayout(new BoxLayout(botones, BoxLayout.Y_AXIS));
 	    
+	    nombrePlaylist= new JTextField();
+        panelCrearPlaylist.add(nombrePlaylist);
+        nombrePlaylist.setColumns(8);
+        
+	    JButton crearPlaylist = new JButton("Crear");
+        crearPlaylist.setMinimumSize(new Dimension(100, 20));
+        crearPlaylist.setBackground(Color.WHITE);
+
+        panelCrearPlaylist.add(crearPlaylist);
+
 	    JButton addCancion = new JButton(">>");
         addCancion.setMinimumSize(new Dimension(100, 20));
         addCancion.setBackground(Color.WHITE);
@@ -507,8 +523,9 @@ public class VentanaPrincipal {
         panelNuevaListaTablas.add(botones, BorderLayout.CENTER);
 
 		panelNuevaListaTablas.add(panelNuevaListarPlaylist, BorderLayout.EAST);
-
+        panelNuevaListaTablas.add(panelCrearPlaylist, BorderLayout.SOUTH);
 		
+        addManejadorBotonCrearPlaylist(crearPlaylist);
 		return panelNuevaListaTablas;
 
 		
@@ -949,7 +966,40 @@ public class VentanaPrincipal {
 			}
 		});
 	}
-	
+	public void addManejadorBotonCrearPlaylist(JButton btnCrear) {
+        btnCrear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	// Hacerlo con objetos o con la bd?
+            	boolean existe = false;
+            	List<ListaCanciones> listasUsuario = usuarioActual.getListasCanciones();
+            	for(ListaCanciones lista : listasUsuario) {
+            		if(lista.getNombre().equals(nombrePlaylist.getText())){
+            			existe = true;
+            		}
+            	}
+            	
+            	if(existe) {
+            		
+            	} else {
+            		int reply = JOptionPane.showConfirmDialog(null, "¿Desea crear una nueva lista?", "Crear nueva lista", JOptionPane.YES_NO_OPTION);
+            		if (reply == JOptionPane.YES_OPTION) {
+            			Controlador.getUnicaInstancia().registrarListaCanciones(nombrePlaylist.getText(), usuarioActual.getLogin());
+            			JOptionPane.showMessageDialog(frmVentanaPrincipal,
+            					"Venta registrada correctamente",
+            					"Crear venta",JOptionPane.PLAIN_MESSAGE);
+            			//while(modelo.getRowCount()>0) modelo.removeRow(0);
+            			//unidades.setText("");
+            			//dni.setText("");
+            			Controlador.getUnicaInstancia().crearListaCanciones();
+            		} else {
+            		    //JOptionPane.showMessageDialog(null, "GOODBYE");
+            		}
+            	}
+                
+            }
+        });
+    }
 	public void addManejadorBotonAddCancionPlaylist(JButton btnAdd) {
         btnAdd.addActionListener(new ActionListener() {
             @Override

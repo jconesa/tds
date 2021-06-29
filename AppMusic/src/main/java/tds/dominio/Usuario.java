@@ -1,6 +1,8 @@
 package tds.dominio;
-import javax.swing.JOptionPane;
+import java.util.LinkedList;
+import java.util.List;
 
+import javax.swing.JOptionPane;
 import tds.controlador.Controlador;
 import tds.dao.UsuarioDAO;
 import tds.gui.LoginView;
@@ -15,6 +17,7 @@ public class Usuario {
 	private String password;
 	private String fechaNacimiento;
 	private String premium;
+	private List<ListaCanciones> listasCanciones;
 
 	public Usuario(String nombre, String apellidos, String email, String login, String password,
 			String fechaNacimiento, String premium) {
@@ -26,6 +29,7 @@ public class Usuario {
 		this.password = password;
 		this.fechaNacimiento = fechaNacimiento;
 		this.premium = premium;
+		this.listasCanciones = new LinkedList<ListaCanciones>();
 	}
 
 	public int getId() {
@@ -87,6 +91,23 @@ public class Usuario {
 	public String getPremium() {
 		return this.premium;
 	}
+	
+	public List<ListaCanciones> getListasCanciones() {
+		return listasCanciones;
+	}
+	
+	public void setListasCanciones(List<ListaCanciones> listas) {
+		for(ListaCanciones lista : listas) {
+			listasCanciones.add(lista);
+		}
+	}
+	public void addListaCanciones(ListaCanciones lista) {
+		listasCanciones.add(lista);
+	}
+	
+	
+	
+	
 	public void setPremium(String premium) {
 		this.premium = premium;
 	}

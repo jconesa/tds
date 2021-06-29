@@ -8,8 +8,13 @@ public class ListaCanciones {
 	private int id;
 	private String nombre;
 	private ArrayList<Cancion> listaCanciones;
+	private Usuario usuario;
 	
-	private ListaCanciones(String nombre) {
+	
+	public ListaCanciones() {
+		this(null);
+	}
+	public ListaCanciones(String nombre) {
 		this.id = 0;
 		this.nombre = nombre;
 		listaCanciones = new ArrayList<Cancion>();
@@ -24,6 +29,14 @@ public class ListaCanciones {
 	}
 	public String getNombre() {
 		return nombre;
+	}
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 	
 	public void setNombre(String nombre) {

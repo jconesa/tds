@@ -2,12 +2,17 @@ package tds.controlador;
 
 import tds.dao.UsuarioDAO;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import modelo.Cliente;
+import modelo.Venta;
+import persistencia.IAdaptadorVentaDAO;
 import tds.dao.CancionDAO;
 import tds.dao.DAOException;
 import tds.dao.FactoriaDAO;
+import tds.dao.ListaCancionesDAO;
 import tds.dao.TDSCancionDAO;
 import tds.dominio.Usuario;
 import tds.dominio.Cancion;
@@ -15,16 +20,22 @@ import tds.dominio.CatalogoCanciones;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 import tds.dominio.CatalogoUsuarios;
+import tds.dominio.ListaCanciones;
 import tds.dominio.Repro;
 import tds.dominio.Reproductor;
 
 public final class Controlador {
 
+	private ListaCancionesDAO adaptadorLista;
+	private UsuarioDAO adaptadorUsuario;
+	
 	private Usuario usuarioActual;
 	private static Controlador unicaInstancia;
 	private FactoriaDAO factoria;
 	private Repro repro = new Repro();
 	private Cancion cancionActual;
+	private ListaCanciones listaActual;
+	
 
 	private Controlador() {
 		usuarioActual = null;
@@ -97,6 +108,25 @@ public final class Controlador {
 
 		CatalogoCanciones.getUnicaInstancia().addCancion(cancion);
 		return true;
+	}
+	
+	public void registrarListaCanciones(String nombreLista, String login) {
+		Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
+		listaActual.setUsuario(usuario);
+		listaActual.setNombre(nombreLista);
+
+		adaptadorLista.addLista(listaActual);
+		usuario.addListaCanciones(listaActual);
+		
+		adaptadorUsuario.modificarUsuario(usuario);
+	}
+	
+	public void crearListaCanciones() {
+		listaActual = new ListaCanciones();
+	}
+	
+	public void crearListaCanciones(String nombre) {
+		listaActual = new ListaCanciones(nombre);
 	}
 	
 	public void playSong(String titulo) {

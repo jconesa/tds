@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
+import tds.dominio.ListaCanciones;
 import tds.dominio.Usuario;
 import beans.Entidad;
 import beans.Propiedad;
@@ -27,14 +29,20 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 	private static final String PASSWORD = "password";
 	private static final String FECHA_NACIMIENTO = "fechaNacimiento";
 	private static final String PREMIUM = "premium";
-	
-	private ServicioPersistencia servPersistencia;
-
+	private static final String LISTA_CANCIONES = "listacanciones";
+	private static ServicioPersistencia servPersistencia;
+	private static TDSUsuarioDAO unicaInstancia = null;
+	public static TDSUsuarioDAO getUnicaInstancia() { // patron singleton
+		if (unicaInstancia == null)
+			return new TDSUsuarioDAO();
+		else
+			return unicaInstancia;
+	}
 	public TDSUsuarioDAO() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
 
-	private Usuario entidadToUsuario(Entidad eUsuario) {
+	/*private Usuario entidadToUsuario(Entidad eUsuario) {
 
 		String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
 		String apellidos = servPersistencia.recuperarPropiedadEntidad(eUsuario, APELLIDOS);
@@ -49,9 +57,36 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		usuario.setId(eUsuario.getId());
 		
 		return usuario;
-	}
+	}*/
+	private Usuario entidadToUsuario(Entidad eUsuario) {
 
+		String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
+		String apellidos = servPersistencia.recuperarPropiedadEntidad(eUsuario, APELLIDOS);
+		String email = servPersistencia.recuperarPropiedadEntidad(eUsuario, EMAIL);
+		String login = servPersistencia.recuperarPropiedadEntidad(eUsuario, LOGIN);
+		String password = servPersistencia.recuperarPropiedadEntidad(eUsuario, PASSWORD);
+		String fechaNacimiento = servPersistencia.recuperarPropiedadEntidad(eUsuario, FECHA_NACIMIENTO);
+		String premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, PREMIUM);
+
+
+		Usuario usuario = new Usuario(nombre, apellidos, email, login, password, fechaNacimiento, premium);
+		usuario.setId(eUsuario.getId());
+		PoolDAO.getUnicaInstancia().addObjeto(usuario.getId(), usuario);
+		
+		String listaCodigo = servPersistencia.recuperarPropiedadEntidad(eUsuario, LISTA_CANCIONES);
+		if(listaCodigo != null && !listaCodigo.equals("") ) {
+			List<ListaCanciones> listasCanciones = obtenerListasDesdeCodigos(listaCodigo);
+			usuario.setListasCanciones(listasCanciones);
+		
+		}
+		return usuario;
+	}
 	private Entidad usuarioToEntidad(Usuario usuario) {
+		
+		
+		TDSListaCancionesDAO adaptadorLista = TDSListaCancionesDAO.getUnicaInstancia();
+		for (ListaCanciones lista : usuario.getListasCanciones())
+			adaptadorLista.addLista(lista);
 		Entidad eUsuario = new Entidad();
 		eUsuario.setNombre(USUARIO);
 
@@ -63,6 +98,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 				new Propiedad(PASSWORD, usuario.getPassword()),
 				new Propiedad(FECHA_NACIMIENTO, usuario.getFechaNacimiento()))));
 				new Propiedad(PREMIUM, usuario.getPremium());
+				new Propiedad(LISTA_CANCIONES, obtenerCodigosListasCanciones(usuario.getListasCanciones()));
 		return eUsuario;
 	}
 
@@ -77,6 +113,30 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
 		
 		return servPersistencia.borrarEntidad(eUsuario);
+	}
+	
+	public void modificarUsuario(Usuario usuario) {
+		
+		Entidad eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
+
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, NOMBRE);
+		servPersistencia.anadirPropiedadEntidad(eUsuario, NOMBRE, usuario.getNombre());
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, APELLIDOS);
+		servPersistencia.anadirPropiedadEntidad(eUsuario, APELLIDOS, usuario.getApellidos());
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, EMAIL);
+		servPersistencia.anadirPropiedadEntidad(eUsuario, EMAIL, usuario.getEmail());
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, LOGIN);
+		servPersistencia.anadirPropiedadEntidad(eUsuario, LOGIN, usuario.getLogin());
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, PASSWORD);
+		servPersistencia.anadirPropiedadEntidad(eUsuario, PASSWORD, usuario.getPassword());
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, FECHA_NACIMIENTO);
+		servPersistencia.anadirPropiedadEntidad(eUsuario, FECHA_NACIMIENTO, usuario.getFechaNacimiento());
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, PREMIUM);
+		servPersistencia.anadirPropiedadEntidad(eUsuario, PREMIUM, usuario.getPremium());
+		
+		String listas = obtenerCodigosListasCanciones(usuario.getListasCanciones());
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, LISTA_CANCIONES);
+		servPersistencia.anadirPropiedadEntidad(eUsuario, LISTA_CANCIONES, listas);
 	}
 
 	/**
@@ -96,6 +156,16 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		servPersistencia.anadirPropiedadEntidad(eUsuario, PREMIUM, usuario.getPremium());
 
 	}
+	
+
+	public Usuario recuperar(int id) {
+		 if (!PoolDAO.getUnicaInstancia().contiene(id)){
+		 Entidad eUsuario = servPersistencia.recuperarEntidad(id);
+		 return entidadToUsuario(eUsuario);
+		 }
+		 else
+		 return (Usuario) PoolDAO.getUnicaInstancia().getObjeto(id);
+		} 	
 
 	public Usuario get(int id) {
 		Entidad eUsuario = servPersistencia.recuperarEntidad(id);
@@ -112,6 +182,25 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		}
 		
 		return usuarios;
+	}
+	
+	
+	private String obtenerCodigosListasCanciones(List<ListaCanciones> listas) {
+		String aux = "";
+		for (ListaCanciones lista : listas) {
+			aux += lista.getId() + " ";
+		}
+		return aux.trim();
+	}
+	private List<ListaCanciones> obtenerListasDesdeCodigos(String listas) {
+
+		List<ListaCanciones> listasCanciones = new LinkedList<ListaCanciones>();
+		StringTokenizer strTok = new StringTokenizer(listas, " ");
+		TDSListaCancionesDAO adaptadorLista = TDSListaCancionesDAO.getUnicaInstancia();
+		while (strTok.hasMoreTokens()) {
+			listasCanciones.add(adaptadorLista.recuperarListaCanciones(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return listasCanciones;
 	}
 
 }

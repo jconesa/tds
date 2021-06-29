@@ -22,8 +22,15 @@ public class TDSCancionDAO {
 	private static final String NUM_REPRODUCCIONES = "numero de reproducciones";
 	private static final String URL = "url";
 
-	private ServicioPersistencia servPersistencia;
-
+	private static ServicioPersistencia servPersistencia;
+	private static TDSCancionDAO unicaInstancia;
+	public static TDSCancionDAO getUnicaInstancia() { // patron
+			// singleton
+		if (unicaInstancia == null)
+			return new TDSCancionDAO();
+		else
+			return unicaInstancia;
+	}
 
 	public TDSCancionDAO() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
@@ -62,7 +69,18 @@ public class TDSCancionDAO {
 	}
 	
 	public void create(Cancion cancion) {
-		Entidad eCancion = this.cancionToEntidad(cancion);
+		Entidad eCancion;
+		// Si la entidad está registrada no la registra de nuevo
+		boolean existe = true; 
+		try {
+			eCancion = servPersistencia.recuperarEntidad(cancion.getId());
+		} catch (NullPointerException e) {
+			existe = false;
+		}		
+		if (existe) return;
+		
+		eCancion = new Entidad();
+		eCancion = this.cancionToEntidad(cancion);
 		eCancion = servPersistencia.registrarEntidad(eCancion);
 		cancion.setId(eCancion.getId());
 	}

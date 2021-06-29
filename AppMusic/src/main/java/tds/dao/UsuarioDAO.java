@@ -10,6 +10,7 @@ public interface UsuarioDAO {
 	boolean delete(Usuario asistente);
 	void updatePerfil(Usuario asistente);
 	void updatePremium(Usuario asistente);
+	void modificarUsuario(Usuario usuario);
 	Usuario get(int id);
 	List<Usuario> getAll();
 	
