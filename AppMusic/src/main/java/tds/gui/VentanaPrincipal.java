@@ -1023,7 +1023,7 @@ public class VentanaPrincipal {
             }
         });
     }
-
+// xd
 	public void addManejadorBotonRemoveCancionPlaylist(JButton btnRemove) {
         btnRemove.addActionListener(new ActionListener() {
             @Override
