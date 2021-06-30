@@ -111,15 +111,17 @@ public final class Controlador {
 		return true;
 	}
 	
-	public void registrarListaCanciones(String nombreLista, String login) {
-		Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
-		listaActual.setUsuario(usuario);
-		listaActual.setNombre(nombreLista);
-
+	public void registrarListaCanciones() {
+		//Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
+		//listaActual.setUsuario(usuarioActual);
+		//listaActual.setNombre(nombreLista);
 		adaptadorLista.addLista(listaActual);
-		usuario.addListaCanciones(listaActual);
+		usuarioActual.addListaCanciones(listaActual);
 		
-		adaptadorUsuario.modificarUsuario(usuario);
+		adaptadorUsuario.modificarUsuario(usuarioActual);
+		for(ListaCanciones lista : Controlador.getUnicaInstancia().getUsuarioActual().getListasCanciones()) {
+			System.out.println(lista.getNombre());
+		}
 	}
 	
 	public void crearListaCanciones() {
@@ -184,6 +186,7 @@ public final class Controlador {
 	}
 	
 	public void hacerPremium() {
+		// Darle funcion a usuario y asignarselo localmente
 		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
 		usuarioDAO.updatePremium(usuarioActual);
 		
