@@ -12,7 +12,8 @@ public class ListaCanciones {
 	
 	
 	public ListaCanciones() {
-		this(null);
+		this.id = 0;
+		listaCanciones = new ArrayList<Cancion>();
 	}
 	public ListaCanciones(String nombre) {
 		this.id = 0;

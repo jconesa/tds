@@ -5,10 +5,13 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -33,6 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
@@ -62,13 +66,22 @@ public class VentanaPrincipal {
     private static JTextField nombrePlaylist;
 
 	private Usuario usuarioActual = Controlador.getUnicaInstancia().getUsuarioActual();
+	
+	private DefaultListModel<String> modeloLista;
+	JList listaPlaylist;
 	private DefaultTableModel modelo;
 	private DefaultTableModel modelo2;
 	private DefaultTableModel modeloPlaylist;
+	private DefaultTableModel modeloMisListas;
 	JTable tabla;
 	JTable tabla2;
 	JTable tablaPlaylist;
+	JTable tablaMisListas;
 
+	/*------------------------PANELES-------------------*/
+	private JPanel panelMedio;
+	private JPanel panelBotones;
+	private JPanel panelMisListas;
 	public VentanaPrincipal() {
 		initialize();
 	}
@@ -194,7 +207,36 @@ public class VentanaPrincipal {
 
 
 	}
-			
+	
+	private void crearLista() {
+		//TODO PONERLO EN SCROLLPANE
+		listaPlaylist = new JList<String>();
+		modeloLista = new DefaultListModel<String>();
+		listaPlaylist.setVisibleRowCount(1);
+		listaPlaylist.setModel(modeloLista);
+		listaPlaylist.setSelectedIndex(1);
+		
+		listaPlaylist.addListSelectionListener(new ListSelectionListener() {
+		    public void valueChanged(ListSelectionEvent event) {
+		        if (!event.getValueIsAdjusting()){
+		            JList source = (JList)event.getSource();
+		            String selected = source.getSelectedValue().toString();
+		            showLista(selected);
+		            // llamada a metodo
+		        }
+		    }
+		});
+	}
+	private void showLista(String titulo){
+		clearTablaMisListas();
+		for(Cancion cancion : usuarioActual.getListaCancionesTitulo(titulo).getListaCanciones()) {
+			modeloMisListas.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete()});
+		}
+		panelMedio.removeAll();
+		panelMedio.add(panelMisListas);
+		panelMedio.revalidate();
+		panelMedio.repaint();
+	}
 	private void crearTablaPlaylist() {
 		tablaPlaylist= new JTable();
 		//tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -212,6 +254,38 @@ public class VentanaPrincipal {
 		    public boolean isCellEditable(int row, int col){ return false;}
 		};
 		tablaPlaylist.setModel(modeloPlaylist);
+	
+		//Se inicializa por defecto con todas las canciones, no con las deseadas
+		
+			/*try {
+				for(Cancion cancion : CatalogoCanciones.getUnicaInstancia().getCanciones()) {;
+				modeloPlaylist.addRow(new Object[]{cancion.getTitulo(), cancion.getInterprete(), cancion.getGenero()});
+				}
+			} catch (DAOException e) {
+			// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+	
+
+		}
+	
+	private void crearTablaMisListas() {
+		tablaMisListas= new JTable();
+		//tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tablaMisListas.setCellSelectionEnabled(false);
+		tablaMisListas.setShowGrid(true);
+		tablaMisListas.setShowVerticalLines(true);
+		tablaMisListas.setGridColor(Color.gray);
+
+		modeloMisListas = new DefaultTableModel() {
+			private String[] columnNames = {"Titulo","Interprete"};
+			public String getColumnName(int column) {
+			    return columnNames[column];
+			}
+		    public int getColumnCount() {return 2;}
+		    public boolean isCellEditable(int row, int col){ return false;}
+		};
+		tablaMisListas.setModel(modeloMisListas);
 	
 		//Se inicializa por defecto con todas las canciones, no con las deseadas
 		
@@ -370,12 +444,17 @@ public class VentanaPrincipal {
 		
 		addManejadorBotonExplorar(btnExplorar, panelMedio, panelExplorar);
 		addManejadorBotonNuevaLista(btnNuevaLista,panelMedio,panelNuevaLista);
-				
+		addManejadorBotonMisListas(btnListas);
+		
+    	crearLista();
+    	listaPlaylist.setVisible(false);
+    	panel_1.add(listaPlaylist);
+		//panel_1.add(interprete);
 		return panel_1;
 		
 		
 	}
-	
+
 	public JPanel crearPanelExplorarNorte() {
 		JPanel panelExplorarNorte = new JPanel();
 		JPanel panelExplorarNorteN = new JPanel();
@@ -532,10 +611,14 @@ public class VentanaPrincipal {
 		
 	}
 	
-	public JPanel crearPanelNorteCentro(JPanel panelNuevaListaNorte, JPanel panelNuevaListaTablas) {
+	
+	
+	public JPanel crearPanelNorteCentro(JPanel panelNuevaListaNorte, JPanel panelNuevaListaTablas, JPanel panelNuevaListaSur) {
 		JPanel panelNuevaLista = new JPanel();
+		panelNuevaLista.setLayout(new BorderLayout(0, 0));
 		panelNuevaLista.add(panelNuevaListaNorte, BorderLayout.NORTH);
 		panelNuevaLista.add(panelNuevaListaTablas, BorderLayout.CENTER);
+		panelNuevaLista.add(panelNuevaListaSur, BorderLayout.SOUTH);
 		return panelNuevaLista;
 
 	}
@@ -610,6 +693,86 @@ public class VentanaPrincipal {
 		addManejadorBotonSiguiente(btnSiguiente);
 		
 		return panelSurPlay;
+	}
+	
+	public JPanel crearPanelNuevaListaSur() {
+		
+		JPanel panelSurNuevaLista = new JPanel();
+		panelSurNuevaLista.setLayout(new FlowLayout());
+		
+		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.setMinimumSize(new Dimension(20,20));
+		btnAceptar.setMaximumSize(new Dimension(20,20));
+		//btnAceptar.setAlignmentX(Component.BOTTOM_ALIGNMENT);
+
+		panelSurNuevaLista.add(btnAceptar);
+		
+		
+	
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.setMinimumSize(new Dimension(20,20));
+		btnCancelar.setMaximumSize(new Dimension(20,20));
+
+		//btnCancelar.setAlignmentX(Component.BOTTOM_ALIGNMENT);
+
+		panelSurNuevaLista.add(btnCancelar);
+		
+	
+		addManejadorBotonAceptarPlaylist(btnAceptar);
+		return panelSurNuevaLista;
+	}
+	
+	public JPanel crearPanelMisListas() {
+		panelMisListas = new JPanel();
+		panelMisListas.setLayout(new BorderLayout(0, 0));
+		crearTablaMisListas();
+		JScrollPane tablaConScroll= new JScrollPane(tablaMisListas);
+		panelMisListas.add(tablaConScroll);
+		fixedSize(tablaConScroll,100,100);
+		
+		JPanel panelSurMisListas = new JPanel();
+		panelSurMisListas.setLayout(new BorderLayout(0, 0));
+		
+		ImageIcon icnPlay = new ImageIcon(getClass().getResource("/play.png"));
+
+		JButton btnPlay = new JButton(icnPlay);
+		btnPlay.setMinimumSize(new Dimension(100,20));
+		btnPlay.setMaximumSize(new Dimension(100,20));
+
+		panelSurMisListas.add(btnPlay, BorderLayout.NORTH);
+		
+		
+	
+		ImageIcon icnPause = new ImageIcon(getClass().getResource("/pausa.png"));
+		JButton btnPause = new JButton(icnPause);
+		btnPause.setMinimumSize(new Dimension(100,20));
+		btnPause.setAlignmentX(Component.BOTTOM_ALIGNMENT);
+		panelSurMisListas.add(btnPause);
+		
+	
+		
+		ImageIcon icnAnterior= new ImageIcon(getClass().getResource("/anterior.png"));
+
+		JButton btnAnterior = new JButton(icnAnterior);
+		btnAnterior.setMinimumSize(new Dimension(100,20));
+
+		panelSurMisListas.add(btnAnterior, BorderLayout.WEST);
+		
+	
+		
+		ImageIcon icnSiguiente= new ImageIcon(getClass().getResource("/siguiente.png"));
+
+		JButton btnSiguiente = new JButton( icnSiguiente);
+		btnSiguiente.setMinimumSize(new Dimension(100,20));
+
+		panelSurMisListas.add(btnSiguiente, BorderLayout.EAST);
+		
+		//addManejadorBotonPlay(btnPlay, tabla);
+		addManejadorBotonStop(btnPause);
+		addManejadorBotonSiguiente(btnSiguiente);
+		
+		panelMisListas.add(panelSurMisListas, BorderLayout.SOUTH);
+		return panelMisListas;
 	}
 	
 	public LinkedList<Cancion> aplicarFiltro(LinkedList<Cancion> listaCanciones){
@@ -817,6 +980,10 @@ public class VentanaPrincipal {
 
 
 	}*/
+	private void clearLista()
+	{
+	    modeloLista.removeAllElements();
+	}
 	private void clearTable()
 	{
 	    modelo.setRowCount(0);
@@ -824,6 +991,10 @@ public class VentanaPrincipal {
 	private void clearTable2()
 	{
 	    modelo2.setRowCount(0);
+	}
+	private void clearTablaMisListas()
+	{
+	    modeloMisListas.setRowCount(0);
 	}
 	
 	public JPanel crearPanelExplorar(JPanel panelExplorarNorte, JPanel panelExplorarSur, JPanel panelExplorarTablas) {
@@ -986,7 +1157,7 @@ public class VentanaPrincipal {
             	} else {
             		int reply = JOptionPane.showConfirmDialog(null, "¿Desea crear una nueva lista?", "Crear nueva lista", JOptionPane.YES_NO_OPTION);
             		if (reply == JOptionPane.YES_OPTION) {
-            			Controlador.getUnicaInstancia().registrarListaCanciones(nombrePlaylist.getText(), usuarioActual.getLogin());
+            			//Controlador.getUnicaInstancia().registrarListaCanciones(nombrePlaylist.getText(), usuarioActual.getLogin());
             			JOptionPane.showMessageDialog(frmVentanaPrincipal,
             					"Venta registrada correctamente",
             					"Crear venta",JOptionPane.PLAIN_MESSAGE);
@@ -998,6 +1169,8 @@ public class VentanaPrincipal {
             			//dni.setText("");
             			Controlador.getUnicaInstancia().crearListaCanciones();
             			Controlador.getUnicaInstancia().getListaActual().setNombre(nombrePlaylist.getText());
+            			Controlador.getUnicaInstancia().getListaActual().setUsuario(usuarioActual);
+
             		} else {
             		    //JOptionPane.showMessageDialog(null, "GOODBYE");
             		}
@@ -1054,8 +1227,23 @@ public class VentanaPrincipal {
     }
     // TODO BOTON CANCELAR 
 
+    
+    public void addManejadorBotonMisListas(JButton btnMisListas) {
+    	btnMisListas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	if(modeloLista.getSize() == 0) {
+                	listaPlaylist.setVisible(true);
+                	for(ListaCanciones lista : usuarioActual.getListasCanciones()) {
+                		modeloLista.addElement(lista.getNombre());
+                	}
+            	}      	
 
-	
+            }
+        });
+    }
+
+
 	public void initialize() {
 		frmVentanaPrincipal = new JFrame();
 		frmVentanaPrincipal.getContentPane().setBackground(Color.WHITE);
@@ -1070,7 +1258,7 @@ public class VentanaPrincipal {
 		
 		JPanel panel1 = crearPanel1();
 		
-		JPanel panelMedio = crearPanelMedio();
+		panelMedio = crearPanelMedio();
 		
 		JPanel panelExplorarNorte = crearPanelExplorarNorte();
 
@@ -1081,10 +1269,12 @@ public class VentanaPrincipal {
 
 		//JPanel panelExplorarCentro = crearPanelExplorarCentro();
 		JPanel panelExplorar = crearPanelExplorar(panelExplorarNorte, panelExplorarSur, panelExplorarTabla);
-		
-		JPanel panelNuevaLista= crearPanelNorteCentro(panelNuevaListaNorte, panelNuevaListaTablas);
+		JPanel panelNuevaListaSur = crearPanelNuevaListaSur();
+		JPanel panelNuevaLista= crearPanelNorteCentro(panelNuevaListaNorte, panelNuevaListaTablas, panelNuevaListaSur);
 		//JPanel panelExplorar2 = crearPanelExplorar(panelExplorarCentro);
-		JPanel panelBotones = crearPanelBotones(panelMedio, panelExplorar, panelNuevaLista);
+		// Cambiar
+		panelBotones = crearPanelBotones(panelMedio, panelExplorar, panelNuevaLista);
+		crearPanelMisListas();
 		//JPanel panelBotones2 = crearPanelBotones(panelMedio, panelExplorar2);
 
 		frmVentanaPrincipal.pack();

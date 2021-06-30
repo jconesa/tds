@@ -20,6 +20,8 @@ import tds.dominio.CatalogoUsuarios;
 import tds.dominio.ListaCanciones;
 import tds.dominio.Repro;
 import tds.dominio.Reproductor;
+import java.io.FileNotFoundException;
+
 
 public final class Controlador {
 
@@ -38,6 +40,8 @@ public final class Controlador {
 		usuarioActual = null;
 		try {
 			factoria = FactoriaDAO.getInstancia();
+			adaptadorLista = factoria.getListaCancionesDAO();
+			adaptadorUsuario = factoria.getUsuarioDAO();
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
@@ -115,12 +119,17 @@ public final class Controlador {
 		//Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
 		//listaActual.setUsuario(usuarioActual);
 		//listaActual.setNombre(nombreLista);
+		System.out.println("------------------------------------------------");
+		System.out.println(listaActual.getNombre());
 		adaptadorLista.addLista(listaActual);
 		usuarioActual.addListaCanciones(listaActual);
 		
 		adaptadorUsuario.modificarUsuario(usuarioActual);
 		for(ListaCanciones lista : Controlador.getUnicaInstancia().getUsuarioActual().getListasCanciones()) {
 			System.out.println(lista.getNombre());
+			for(Cancion cancion : lista.getListaCanciones()) {
+				System.out.println(cancion.getTitulo());
+			}
 		}
 	}
 	
@@ -191,5 +200,28 @@ public final class Controlador {
 		usuarioDAO.updatePremium(usuarioActual);
 		
 	}
+	
+	public void exportarPDF() throws FileNotFoundException, DocumentException  {
+        String path = "C:\Users\nombre\git\AppMusicTDs\Listas.pdf";
+        File f = new File(path);
+        if (f.exists()) f.delete();
+        FileOutputStream file = new FileOutputStream(path);
+        Document doc = new Document();
+        PDFWriter.getInstance(doc,file);
+        doc.open();
+        doc.newPage();
+        doc.add(new Phrase("Usuario: ".concat(usuarioActual.concat("\n\n")),FontFactory.getFont(FontFactory.COURIER,25,Font.BOLD, new BaseColor(0,0,0))));
+        for(ListaCanciones l: usuarioActual.getListasCanciones()) {
+            doc.add(new Phrase("Playlist: ".concat(l.getNombre().concat("\n")),FontFactory.getFont(FontFactory.COURIER,25,Font.BOLD, new BaseColor(0,0,0))));
+
+            for(Cancion c: l.getCanciones) {
+                doc.add(new Phrase("\tNombre: ".concat(c.getTitulo().concat("\n")),FontFactory.getFont(FontFactory.COURIER,25,Font.BOLD, new BaseColor(0,0,0))));
+                doc.add(new Phrase("\tAutor: ".concat(c.getInterprete().concat("\n")),FontFactory.getFont(FontFactory.COURIER,25,Font.BOLD, new BaseColor(0,0,0))));
+
+            }
+            doc.add(new Phrase("\n")),FontFactory.getFont(FontFactory.COURIER,25,Font.BOLD, new BaseColor(0,0,0))));
+        }
+        doc.close();
+    }
 
 }

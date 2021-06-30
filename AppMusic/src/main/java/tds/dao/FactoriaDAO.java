@@ -41,4 +41,5 @@ public abstract class FactoriaDAO {
 	public abstract UsuarioDAO getUsuarioDAO();	
 	// Revisar en toda la jerarquia si deberia ser con TDS o sin TDS
 	public abstract TDSCancionDAO getCancionDAO();	
+	public abstract TDSListaCancionesDAO getListaCancionesDAO();
 }

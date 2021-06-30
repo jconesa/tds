@@ -22,5 +22,9 @@ public final class TDSFactoriaDAO extends FactoriaDAO {
 		// TODO Auto-generated method stub
 		return new TDSCancionDAO();
 	}
+	
+	public TDSListaCancionesDAO getListaCancionesDAO() {	
+		return TDSListaCancionesDAO.getUnicaInstancia(); 
+	}
 
 }

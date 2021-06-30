@@ -16,7 +16,7 @@ import tds.dominio.Usuario;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 
-public class TDSListaCancionesDAO {
+public class TDSListaCancionesDAO implements ListaCancionesDAO {
 
 	private static final String NOMBRE = "nombre";
 	private static final String LISTA_CANCIONES = "listaCanciones";
@@ -129,16 +129,16 @@ public class TDSListaCancionesDAO {
 		TDSUsuarioDAO adaptadorUsuario = TDSUsuarioDAO.getUnicaInstancia();
 		int idUsuario = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eLista, USUARIO));
 		
-		Usuario usuario  = adaptadorUsuario.recuperarCl(codigoCliente);
+		Usuario usuario  = adaptadorUsuario.recuperar(idUsuario);
 		lista.setUsuario(usuario);
 		// Canciones
-		List<Cancion> canciones = obtenerIdCanciones(servPersistencia.recuperarPropiedadEntidad(eLista, LISTA_CANCIONES));
+		List<Cancion> canciones = obtenerListaCancionesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eLista, LISTA_CANCIONES));
 
-		for (LineaVenta lv : lineasVenta)
-			venta.addLineaVenta(lv);
+		for (Cancion c : canciones)
+			lista.addCancion(c);
 
 		// devolver el objeto venta
-		return venta;
+		return lista;
 	}
 	
 // -------------------Funciones auxiliares-----------------------------
@@ -151,15 +151,15 @@ public class TDSListaCancionesDAO {
 
 	}
 	
-	private List<Cancion> obtenerLineasVentaDesdeCodigos(String canciones) {
+	private List<Cancion> obtenerListaCancionesDesdeCodigos(String canciones) {
 
 		List<Cancion> listaCanciones = new LinkedList<Cancion>();
 		StringTokenizer strTok = new StringTokenizer(canciones, " ");
 		TDSCancionDAO adaptadorCancion = TDSCancionDAO.getUnicaInstancia();
 		while (strTok.hasMoreTokens()) {
-			listaCanciones.add(adaptadorCancion.recuperarLineaVenta(Integer.valueOf((String) strTok.nextElement())));
+			listaCanciones.add(adaptadorCancion.get(Integer.valueOf((String) strTok.nextElement())));
 		}
-		return lineasVenta;
+		return listaCanciones;
 	}
 
 }

@@ -12,7 +12,7 @@ import tds.dominio.Usuario;
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
 
-public class TDSCancionDAO {
+public class TDSCancionDAO implements CancionDAO{
 	private static final String CANCION = "Cancion";
 	
 	private static final String TITULO = "titulo";

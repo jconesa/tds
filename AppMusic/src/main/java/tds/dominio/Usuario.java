@@ -96,6 +96,17 @@ public class Usuario {
 		return listasCanciones;
 	}
 	
+	public ListaCanciones getListaCancionesTitulo(String titulo) {
+		ListaCanciones playList = null;
+		for(ListaCanciones lista : listasCanciones) {
+			if(lista.getNombre().equals(titulo)) {
+				playList = lista;
+				break;
+			}
+		}
+		return playList;
+	}
+	
 	public void setListasCanciones(List<ListaCanciones> listas) {
 		for(ListaCanciones lista : listas) {
 			listasCanciones.add(lista);
