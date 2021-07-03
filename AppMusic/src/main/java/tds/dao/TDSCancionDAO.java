@@ -19,7 +19,6 @@ public class TDSCancionDAO implements CancionDAO{
 	private static final String GENERO = "genero";
 	private static final String RUTA_FICHERO = "ruta fichero";
 	private static final String NUM_REPRODUCCIONES = "numero de reproducciones";
-	//private static final String URL = "url";
 
 	private static ServicioPersistencia servPersistencia;
 	private static TDSCancionDAO unicaInstancia;
@@ -63,7 +62,6 @@ public class TDSCancionDAO implements CancionDAO{
 				new Propiedad(GENERO, cancion.getGenero()),
 				new Propiedad(RUTA_FICHERO, cancion.getRutaFichero()), 
 				new Propiedad(NUM_REPRODUCCIONES, String.valueOf(cancion.getNumReproducciones())))));
-				//new Propiedad(URL, cancion.getUrl()))));
 		
 		return eCancion;
 	}

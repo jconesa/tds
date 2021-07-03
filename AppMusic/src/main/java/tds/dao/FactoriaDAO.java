@@ -39,7 +39,6 @@ public abstract class FactoriaDAO {
 	// Metodos factoria para obtener adaptadores
 	
 	public abstract UsuarioDAO getUsuarioDAO();	
-	// Revisar en toda la jerarquia si deberia ser con TDS o sin TDS
 	public abstract TDSCancionDAO getCancionDAO();	
 	public abstract TDSListaCancionesDAO getListaCancionesDAO();
 }

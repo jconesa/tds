@@ -92,6 +92,13 @@ public class Usuario {
 		return this.premium;
 	}
 	
+	public void setPremium(String premium) {
+		this.premium = premium;
+	}
+	public void realizarPago() {
+		setPremium("true");
+		Controlador.getUnicaInstancia().hacerPremium();
+	}
 	public double getDescuento() {
 		Descuento descuento;
 		double precio = Descuento.precio;
@@ -156,12 +163,5 @@ public class Usuario {
 	}
 	
 
-	public void setPremium(String premium) {
-		this.premium = premium;
-	}
-	public void realizarPago() {
-		setPremium("true");
-		Controlador.getUnicaInstancia().hacerPremium();
-	}
 
 }

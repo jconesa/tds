@@ -163,7 +163,6 @@ public class VentanaPrincipal {
 
 	private void crearTabla() {
 		tabla = new JTable();
-		// tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabla.setCellSelectionEnabled(true);
 		tabla.setShowGrid(true);
 		tabla.setShowVerticalLines(true);
@@ -272,7 +271,6 @@ public class VentanaPrincipal {
 
 	private void crearTablaPlaylist() {
 		tablaPlaylist = new JTable();
-		// tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tablaPlaylist.setCellSelectionEnabled(true);
 		tablaPlaylist.setShowGrid(true);
 		tablaPlaylist.setShowVerticalLines(true);
@@ -661,7 +659,7 @@ public class VentanaPrincipal {
 
 	}
 
-	public void crearPanelNorteCentro() {
+	public void crearPanelNuevaLista() {
 		panelNuevaLista = new JPanel();
 		panelNuevaLista.setLayout(new BorderLayout(0, 0));
 		panelNuevaLista.add(panelNuevaListaNorte, BorderLayout.NORTH);
@@ -735,7 +733,6 @@ public class VentanaPrincipal {
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setMinimumSize(new Dimension(20, 20));
 		btnAceptar.setMaximumSize(new Dimension(20, 20));
-		// btnAceptar.setAlignmentX(Component.BOTTOM_ALIGNMENT);
 
 		panelNuevaListaSur.add(btnAceptar);
 
@@ -743,7 +740,6 @@ public class VentanaPrincipal {
 		btnCancelar.setMinimumSize(new Dimension(20, 20));
 		btnCancelar.setMaximumSize(new Dimension(20, 20));
 
-		// btnCancelar.setAlignmentX(Component.BOTTOM_ALIGNMENT);
 
 		panelNuevaListaSur.add(btnCancelar);
 
@@ -897,14 +893,6 @@ public class VentanaPrincipal {
 	public LinkedList<Cancion> aplicarFiltro(LinkedList<Cancion> listaCanciones) {
 		LinkedList<Cancion> listaCancionesFiltrada = new LinkedList<Cancion>();
 
-		/*
-		 * // Interprete y titulo vacios if(txtIntrprete.getText().isEmpty() &&
-		 * txtTtulo.getText().isEmpty()) { String genero =
-		 * generos.getSelectedItem().toString(); for(Cancion cancion : listaCanciones) {
-		 * if(genero.equals(cancion.getGenero())) { listaCancionesFiltrada.add(cancion);
-		 * } } }
-		 */
-
 		// Solo título
 		if (txtIntrprete.getText().isEmpty() && !txtTtulo.getText().isEmpty() && generos.getSelectedItem().equals("")) {
 			String titulo = txtTtulo.getText();
@@ -992,13 +980,6 @@ public class VentanaPrincipal {
 	public LinkedList<Cancion> aplicarFiltro2(LinkedList<Cancion> listaCanciones) {
 		LinkedList<Cancion> listaCancionesFiltrada = new LinkedList<Cancion>();
 
-		/*
-		 * // Interprete y titulo vacios if(txtIntrprete.getText().isEmpty() &&
-		 * txtTtulo.getText().isEmpty()) { String genero =
-		 * generos.getSelectedItem().toString(); for(Cancion cancion : listaCanciones) {
-		 * if(genero.equals(cancion.getGenero())) { listaCancionesFiltrada.add(cancion);
-		 * } } }
-		 */
 
 		// Solo título
 		if (txtIntrprete2.getText().isEmpty() && !txtTtulo2.getText().isEmpty()
@@ -1088,22 +1069,6 @@ public class VentanaPrincipal {
 
 	}
 
-	/*
-	 * public JPanel crearPanelExplorarCentro() { JPanel panelExplorarCentro = new
-	 * JPanel(); ImageIcon icnPause = new
-	 * ImageIcon(getClass().getResource("/pause.png")); JButton btnPause = new
-	 * JButton("Pause", icnPause); btnPause.setBackground(Color.WHITE);
-	 * btnPause.setAlignmentX(Component.CENTER_ALIGNMENT);
-	 * btnPause.setMinimumSize(new Dimension(100, 20));
-	 * //panelExplorarCentro.add(btnPause); JComboBox comboBox = new JComboBox();
-	 * panelExplorarCentro.add(comboBox);
-	 * 
-	 * 
-	 * return panelExplorarCentro;
-	 * 
-	 * 
-	 * }
-	 */
 	private void clearLista() {
 		modeloLista.removeAllElements();
 	}
@@ -1212,7 +1177,7 @@ public class VentanaPrincipal {
 		btnPlay.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JTable tabla = Controlador.getUnicaInstancia().getTablaActual();
+				JTable tabla = controlador.getTablaActual();
 				if(tabla.getSelectedRow() == -1)
 					tabla.setRowSelectionInterval(0, 0);
 				String titulo = (String) tabla.getValueAt(tabla.getSelectedRow(), 0);
@@ -1311,7 +1276,6 @@ public class VentanaPrincipal {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				// Hacerlo con objetos o con la bd?
 				boolean existe = false;
 				List<ListaCanciones> listasUsuario = usuarioActual.getListasCanciones();
 				for (ListaCanciones lista : listasUsuario) {
@@ -1355,9 +1319,7 @@ public class VentanaPrincipal {
 						controlador.getListaActual().setUsuario(usuarioActual);
 
 
-					} else {
-						// JOptionPane.showMessageDialog(null, "GOODBYE");
-					}
+					} 
 				}
 				nombrePlaylist.setText("");
 
@@ -1388,10 +1350,7 @@ public class VentanaPrincipal {
 		btnRemove.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// LinkedList<Cancion> canciones =
-				// CatalogoCanciones.getUnicaInstancia().getCanciones();
 
-				//LinkedList<Cancion> playList = new LinkedList<Cancion>();
 				ListaCanciones playList = controlador.getListaActual();
 				
 				int indice = tablaPlaylist.getSelectedRow();
@@ -1439,10 +1398,6 @@ public class VentanaPrincipal {
 				clearTablaTop10();
 				List<Cancion> listaTop10 = controlador.getCancionesTop();
 				for (Cancion cancion : listaTop10) {
-					System.out.println("MANEJADOR TOP 10");
-					System.out.println(cancion.getTitulo());
-					System.out.println(cancion.getInterprete());
-					System.out.println(cancion.getNumReproducciones());
 					modeloTop10.addRow(new Object[] { cancion.getTitulo(), cancion.getInterprete(),
 							cancion.getNumReproducciones() });
 				}
@@ -1505,14 +1460,12 @@ public class VentanaPrincipal {
 
 		crearPanelExplorarNorte2();
 		crearPanelExplorarTabla();
-		crearPanelNuevaListaTablas(); // Dos listas juntas
+		crearPanelNuevaListaTablas(); // Dos tablas juntas
 		crearPanelExploraSur();
 
-		// JPanel panelExplorarCentro = crearPanelExplorarCentro();
 		crearPanelExplorar();
 		crearPanelNuevaListaSur();
-		crearPanelNorteCentro(); // panel nueva lista
-		// JPanel panelExplorar2 = crearPanelExplorar(panelExplorarCentro);
+		crearPanelNuevaLista(); // panel nueva lista
 		// Cambiar
 		crearPanelBotones();
 		

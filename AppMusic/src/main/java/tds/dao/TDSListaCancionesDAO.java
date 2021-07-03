@@ -62,7 +62,6 @@ public class TDSListaCancionesDAO implements ListaCancionesDAO {
 	}
 	
 	public void borrarLista(ListaCanciones listaCanciones) {
-		// No se comprueban restricciones de integridad con Cliente
 		Entidad eLista;
 		TDSCancionDAO adaptadorCancion = TDSCancionDAO.getUnicaInstancia();
 
@@ -90,7 +89,7 @@ public class TDSListaCancionesDAO implements ListaCancionesDAO {
 	}
 	
 	public ListaCanciones recuperarListaCanciones(int id) {
-		// Si la entidad estï¿½ en el pool la devuelve directamente
+		// Si la entidad esta en el pool la devuelve directamente
 		if (PoolDAO.getUnicaInstancia().contiene(id))
 			return (ListaCanciones) PoolDAO.getUnicaInstancia().getObjeto(id);
 
@@ -108,7 +107,7 @@ public class TDSListaCancionesDAO implements ListaCancionesDAO {
 		PoolDAO.getUnicaInstancia().addObjeto(id, lista);
 
 		// recuperar propiedades que son objetos llamando a adaptadores
-		// cliente
+		// usuario
 		TDSUsuarioDAO adaptadorUsuario = TDSUsuarioDAO.getUnicaInstancia();
 		int idUsuario = Integer.parseInt(servPersistencia.recuperarPropiedadEntidad(eLista, USUARIO));
 		
@@ -120,7 +119,7 @@ public class TDSListaCancionesDAO implements ListaCancionesDAO {
 		for (Cancion c : canciones)
 			lista.addCancion(c);
 
-		// devolver el objeto venta
+		// devolver el objeto lista
 		return lista;
 	}
 	

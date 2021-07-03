@@ -5,5 +5,4 @@ public class DescuentoSuperAfortunado implements Descuento {
 	public double calcDescuento() {
 		return precio * 0.7;
 	}
-
 }

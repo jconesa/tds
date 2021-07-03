@@ -10,7 +10,6 @@ public class Repro {
 	
 	private MediaPlayer mediaPlayer;
 	private String binPath;
-	private String tempPath;
 	
 	public Repro() {
 		initialize();
@@ -48,17 +47,13 @@ public class Repro {
 		try {
 			binPath = URLDecoder.decode(resource.getFile(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		binPath = binPath.replaceFirst("/", "");
 		binPath = binPath.replace("/", "\\");
-		// quitar "/" añadida al inicio del path en plataforma Windows
-		tempPath = binPath.replace("\bin", "\temp");
 		
 
-		System.out.println(binPath);
-		System.out.println(tempPath);
+		
 	}
 
 }

@@ -72,9 +72,6 @@ public final class Controlador implements CancionesListener {
 			e.printStackTrace();
 		}
 		cargadorCanciones.addCargadorChangeListener((CancionesListener) this);
-		/*String ruta = "xml/canciones.xml";
-		File xml = new File(ruta);
-		this.cargarCanciones(xml);*/
 	}
 
 	public static Controlador getUnicaInstancia() {
@@ -127,22 +124,8 @@ public final class Controlador implements CancionesListener {
 		return true;
 	}
 	
-	/*public boolean registrarCancion(String titulo, String interprete, String genero, String rutaFichero, int numReproducciones, String url) {
-
-		//Checkear si ya esta metida la canción
-		Cancion cancion = new Cancion(titulo, interprete, genero, rutaFichero, numReproducciones, url);
-
-		CancionDAO cancionDAO = factoria
-				.getCancionDAO(); /* Adaptador DAO para almacenar el nuevo Usuario en la BD 
-		cancionDAO.create(cancion);
-
-		CatalogoCanciones.getUnicaInstancia().addCancion(cancion);
-		return true;
-	}*/
-	
 	public boolean registrarCancion(String titulo, String interprete, String genero, int numReproducciones, String ruta) {
 
-		//Checkear si ya esta metida la canción
 		Cancion cancion = new Cancion(titulo, interprete, genero, ruta, numReproducciones);
 
 		TDSCancionDAO cancionDAO = factoria
@@ -249,7 +232,6 @@ public final class Controlador implements CancionesListener {
 	}
 	
 	public void hacerPremium() {
-		// Darle funcion a usuario y asignarselo localmente
 		usuarioActual.getDescuento();
 		UsuarioDAO usuarioDAO = factoria.getUsuarioDAO();
 		usuarioDAO.updatePremium(usuarioActual);
@@ -320,7 +302,7 @@ public final class Controlador implements CancionesListener {
 				}
 
 			}
-			Controlador.getUnicaInstancia().registrarCancion(cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), 0, rutaFichero.toString());
+			this.registrarCancion(cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), 0, rutaFichero.toString());
 		}
 		
 	}
