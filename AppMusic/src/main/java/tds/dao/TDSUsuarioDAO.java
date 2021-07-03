@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
+import tds.dominio.Cancion;
 import tds.dominio.ListaCanciones;
 import tds.dominio.Usuario;
 import beans.Entidad;
@@ -29,6 +30,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 	private static final String PASSWORD = "password";
 	private static final String FECHA_NACIMIENTO = "fechaNacimiento";
 	private static final String PREMIUM = "premium";
+	private static final String RECIENTES = "recientes";
 	private static final String LISTA_CANCIONES = "listacanciones";
 	private static ServicioPersistencia servPersistencia;
 	private static TDSUsuarioDAO unicaInstancia = null;
@@ -60,6 +62,8 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 	}*/
 	private Usuario entidadToUsuario(Entidad eUsuario) {
 
+		//List<ListaCanciones> listas = new LinkedList<ListaCanciones>();
+		
 		String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
 		String apellidos = servPersistencia.recuperarPropiedadEntidad(eUsuario, APELLIDOS);
 		String email = servPersistencia.recuperarPropiedadEntidad(eUsuario, EMAIL);
@@ -73,13 +77,42 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		usuario.setId(eUsuario.getId());
 		PoolDAO.getUnicaInstancia().addObjeto(usuario.getId(), usuario);
 		
-		String listaCodigo = servPersistencia.recuperarPropiedadEntidad(eUsuario, LISTA_CANCIONES);
+		/*String [] idsListaCanciones = servPersistencia.recuperarPropiedadEntidad(eUsuario, LISTA_CANCIONES).trim().split(" ");
+		if(idsListaCanciones.equals(null))
+			System.out.println("NULO");
+		for(String idListaCanciones : idsListaCanciones) {
+			if(!idListaCanciones.equals(""))
+				try {
+					listas.add(FactoriaDAO.getInstancia().getListaCancionesDAO().recuperarListaCanciones(Integer.parseInt(idListaCanciones)));
+				} catch (NumberFormatException | DAOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		*/
+		if(servPersistencia.recuperarPropiedadEntidad(eUsuario, LISTA_CANCIONES) != null)
+		{
+			System.out.println("NO ES NULO");
+			List<ListaCanciones> listas = obtenerListasDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, LISTA_CANCIONES));
+			usuario.setListasCanciones(listas);
+
+		}
+		if(servPersistencia.recuperarPropiedadEntidad(eUsuario, RECIENTES) != null)
+		{
+			List<Cancion> recientes = obtenerRecientesDesdeCodigos(servPersistencia.recuperarPropiedadEntidad(eUsuario, RECIENTES));
+			usuario.setListaRecientes(recientes);
+
+		}
+		return usuario;
+		
+		/*String listaCodigo = servPersistencia.recuperarPropiedadEntidad(eUsuario, LISTA_CANCIONES);
+		
 		if(listaCodigo != null && !listaCodigo.equals("") ) {
 			List<ListaCanciones> listasCanciones = obtenerListasDesdeCodigos(listaCodigo);
 			usuario.setListasCanciones(listasCanciones);
 		
 		}
-		return usuario;
+		return usuario;*/
 	}
 	private Entidad usuarioToEntidad(Usuario usuario) {
 		
@@ -98,14 +131,33 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 				new Propiedad(PASSWORD, usuario.getPassword()),
 				new Propiedad(FECHA_NACIMIENTO, usuario.getFechaNacimiento()))));
 				new Propiedad(PREMIUM, usuario.getPremium());
+				new Propiedad(RECIENTES, obtenerCodigosRecientes(usuario.getListaRecientes()));
 				new Propiedad(LISTA_CANCIONES, obtenerCodigosListasCanciones(usuario.getListasCanciones()));
 		return eUsuario;
 	}
 
-	public void create(Usuario usuario) {
+	/*public void create(Usuario usuario) {
+		
 		Entidad eUsuario = this.usuarioToEntidad(usuario);
 		eUsuario = servPersistencia.registrarEntidad(eUsuario);
 		usuario.setId(eUsuario.getId());
+	}*/
+	
+	public void create(Usuario usuario) {
+		Entidad eUsuario; 
+		boolean existe = true;
+		try {
+			eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
+		} catch (NullPointerException e) {
+			existe = false;
+		}
+		
+		if(existe) return;
+		
+		eUsuario = this.usuarioToEntidad(usuario);
+		eUsuario = servPersistencia.registrarEntidad(eUsuario);
+		usuario.setId(eUsuario.getId());
+
 	}
 
 	public boolean delete(Usuario usuario) {
@@ -137,6 +189,11 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		String listas = obtenerCodigosListasCanciones(usuario.getListasCanciones());
 		servPersistencia.eliminarPropiedadEntidad(eUsuario, LISTA_CANCIONES);
 		servPersistencia.anadirPropiedadEntidad(eUsuario, LISTA_CANCIONES, listas);
+		
+		String recientes = obtenerCodigosRecientes(usuario.getListaRecientes());
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, RECIENTES);
+		servPersistencia.anadirPropiedadEntidad(eUsuario, RECIENTES, recientes);
+
 	}
 
 	/**
@@ -157,6 +214,17 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 
 	}
 	
+	public void updateRecientes(Usuario usuario) {
+		Entidad eUsuario;
+
+		eUsuario = servPersistencia.recuperarEntidad(usuario.getId());
+
+		String canciones = obtenerCodigosRecientes(usuario.getListaRecientes());
+		servPersistencia.eliminarPropiedadEntidad(eUsuario, RECIENTES);
+		servPersistencia.anadirPropiedadEntidad(eUsuario, RECIENTES, canciones);
+
+	}
+	
 
 	public Usuario recuperar(int id) {
 		 if (!PoolDAO.getUnicaInstancia().contiene(id)){
@@ -168,9 +236,12 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		} 	
 
 	public Usuario get(int id) {
-		Entidad eUsuario = servPersistencia.recuperarEntidad(id);
-		
-		return entidadToUsuario(eUsuario);
+		if ( !PoolDAO.getUnicaInstancia().contiene(id)){
+			Entidad eUsuario = servPersistencia.recuperarEntidad(id);
+			return entidadToUsuario(eUsuario);
+		}
+		else
+			return (Usuario) PoolDAO.getUnicaInstancia().getObjeto(id);
 	}
 
 	public List<Usuario> getAll() {
@@ -178,23 +249,50 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 
 		List<Usuario> usuarios = new LinkedList<Usuario>();
 		for (Entidad eUsuario : entidades) {
+			System.out.println("id de usuario");
+			System.out.println(eUsuario.getId());
 			usuarios.add(get(eUsuario.getId()));
 		}
 		
 		return usuarios;
 	}
 	
+	private String obtenerCodigosRecientes(List<Cancion> lista) {
+		String aux = "";
+		for (Cancion cancion : lista) {
+			aux += cancion.getId() + " ";
+		}
+		System.out.println("OBTENER CODIGOS");
+		System.out.println(aux.trim());
+		return aux.trim();
+	}
 	
+	private List<Cancion> obtenerRecientesDesdeCodigos(String lista) {
+
+		List<Cancion> recientes= new LinkedList<Cancion>();
+		System.out.println("OBTENER LISTAS DESDE CODIGOS");
+		System.out.println(lista);
+		StringTokenizer strTok = new StringTokenizer(lista, " ");
+		TDSCancionDAO adaptadorCancion = TDSCancionDAO.getUnicaInstancia();
+		while (strTok.hasMoreTokens()) {
+			recientes.add(adaptadorCancion.get(Integer.valueOf((String) strTok.nextElement())));
+		}
+		return recientes;
+	}
 	private String obtenerCodigosListasCanciones(List<ListaCanciones> listas) {
 		String aux = "";
 		for (ListaCanciones lista : listas) {
 			aux += lista.getId() + " ";
 		}
+		System.out.println("OBTENER CODIGOS");
+		System.out.println(aux.trim());
 		return aux.trim();
 	}
 	private List<ListaCanciones> obtenerListasDesdeCodigos(String listas) {
 
 		List<ListaCanciones> listasCanciones = new LinkedList<ListaCanciones>();
+		System.out.println("OBTENER LISTAS DESDE CODIGOS");
+		System.out.println(listas);
 		StringTokenizer strTok = new StringTokenizer(listas, " ");
 		TDSListaCancionesDAO adaptadorLista = TDSListaCancionesDAO.getUnicaInstancia();
 		while (strTok.hasMoreTokens()) {

@@ -1,8 +1,6 @@
 package tds.dao;
 
-import tds.dao.DAOException;
 import tds.dao.FactoriaDAO;
-import tds.dao.UsuarioDAO;
 
 /**
  * Factoria abstracta DAO.
@@ -31,7 +29,9 @@ public abstract class FactoriaDAO {
 	
 
 	public static FactoriaDAO getInstancia() throws DAOException{
-		return getInstancia(FactoriaDAO.DAO_TDS);
+		if(unicaInstancia == null)
+			return getInstancia(FactoriaDAO.DAO_TDS);
+		return unicaInstancia;
 	}
 
 	protected FactoriaDAO (){}

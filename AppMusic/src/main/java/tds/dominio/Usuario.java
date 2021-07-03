@@ -1,11 +1,9 @@
 package tds.dominio;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.swing.JOptionPane;
+import java.util.Random;
 import tds.controlador.Controlador;
-import tds.dao.UsuarioDAO;
-import tds.gui.LoginView;
+
 
 public class Usuario {
 	
@@ -16,8 +14,10 @@ public class Usuario {
 	private String login;
 	private String password;
 	private String fechaNacimiento;
+	// Cambiar a boolean y convertir a string en bd
 	private String premium;
 	private List<ListaCanciones> listasCanciones;
+	private List<Cancion> listaRecientes;
 
 	public Usuario(String nombre, String apellidos, String email, String login, String password,
 			String fechaNacimiento, String premium) {
@@ -30,6 +30,7 @@ public class Usuario {
 		this.fechaNacimiento = fechaNacimiento;
 		this.premium = premium;
 		this.listasCanciones = new LinkedList<ListaCanciones>();
+		this.listaRecientes = new LinkedList<Cancion>();
 	}
 
 	public int getId() {
@@ -92,8 +93,30 @@ public class Usuario {
 		return this.premium;
 	}
 	
+	public double getDescuento() {
+		Descuento descuento;
+		double precio = Descuento.precio;
+		Random rand = new Random();
+		int maximo = 100;
+		int aleatorio = rand.nextInt(maximo);
+		
+		if(aleatorio > 60 && aleatorio < 85) {
+			descuento = new DescuentoJoven();
+			precio = descuento.calcDescuento();
+		} else if(aleatorio >= 85) {
+			descuento = new DescuentoJubilado();
+			precio = descuento.calcDescuento();
+		}
+		
+		return precio;
+
+	}
 	public List<ListaCanciones> getListasCanciones() {
 		return listasCanciones;
+	}
+	
+	public List<Cancion> getListaRecientes() {
+		return listaRecientes;
 	}
 	
 	public ListaCanciones getListaCancionesTitulo(String titulo) {
@@ -112,24 +135,32 @@ public class Usuario {
 			listasCanciones.add(lista);
 		}
 	}
+	
+	public void setListaRecientes(List<Cancion> recientes) {
+		for(Cancion cancion : recientes)
+			listaRecientes.add(cancion);
+	}
+	
 	public void addListaCanciones(ListaCanciones lista) {
 		listasCanciones.add(lista);
 	}
 	
+	public void addCancionReciente(Cancion cancion) {
+		if(listaRecientes.contains(cancion))
+			return;
+		if(listaRecientes.size() < 10) {
+			listaRecientes.add(cancion);
+		} else {
+			listaRecientes.remove(0);
+			listaRecientes.add(cancion);
+		}
+	}
 	
-	
-	
+
 	public void setPremium(String premium) {
 		this.premium = premium;
 	}
 	public void realizarPago() {
-		/*if(this.premium == "true")
-		{
-			int respuesta = JOptionPane.showConfirmDialog(null, "TEST", "TEST", 
-					JOptionPane.YES_NO_OPTION);
-		}*/
-		int respuesta = JOptionPane.showConfirmDialog(null, "TEST", getPremium(), 
-				JOptionPane.YES_NO_OPTION);
 		setPremium("true");
 		Controlador.getUnicaInstancia().hacerPremium();
 	}

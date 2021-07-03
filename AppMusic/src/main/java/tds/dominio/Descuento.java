@@ -1,5 +1,6 @@
 package tds.dominio;
 
 public interface Descuento {
-	public double calcDescuento(double precio);
+	public static double precio = 20.00;
+	public double calcDescuento();
 }

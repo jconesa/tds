@@ -1,16 +1,13 @@
 package tds.dao;
 
-import java.util.List;
-
-import tds.dominio.Cancion;
 import tds.dominio.ListaCanciones;
 
 public interface ListaCancionesDAO {
-	void create(Cancion cancion);
-	boolean delete(Cancion cancion);
-	Cancion get(int id);
-	List<Cancion> getAll();
+	//void addCancion(Cancion cancion);
 	void addLista(ListaCanciones listaCanciones);
+	void borrarLista(ListaCanciones listaCanciones);
+	void modificarLista(ListaCanciones listaCanciones);
+	ListaCanciones recuperarListaCanciones(int id);
 	
 	//Entidad cancionToEntidad(Cancion cancion);
 }

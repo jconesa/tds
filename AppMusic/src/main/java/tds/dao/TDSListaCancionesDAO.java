@@ -1,9 +1,7 @@
 package tds.dao;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -36,18 +34,7 @@ public class TDSListaCancionesDAO implements ListaCancionesDAO {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
 	
-
 	
-	public void addCancion(Cancion cancion) {
-		Entidad eCancion = new Entidad();
-		eCancion = servPersistencia.recuperarEntidad(cancion.getId());
-		TDSListaCancionesDAO lcDao = TDSListaCancionesDAO.getUnicaInstancia();
-		
-		}
-		
-		
-	
-
 	public void addLista(ListaCanciones listaCanciones) {
 		Entidad eLista;
 		boolean existe = true;
@@ -157,7 +144,7 @@ public class TDSListaCancionesDAO implements ListaCancionesDAO {
 		StringTokenizer strTok = new StringTokenizer(canciones, " ");
 		TDSCancionDAO adaptadorCancion = TDSCancionDAO.getUnicaInstancia();
 		while (strTok.hasMoreTokens()) {
-			listaCanciones.add(adaptadorCancion.get(Integer.valueOf((String) strTok.nextElement())));
+			listaCanciones.add(adaptadorCancion.get(Integer.valueOf((String) strTok.nextToken())));
 		}
 		return listaCanciones;
 	}

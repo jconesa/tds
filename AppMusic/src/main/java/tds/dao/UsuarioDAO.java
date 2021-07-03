@@ -13,5 +13,6 @@ public interface UsuarioDAO {
 	void modificarUsuario(Usuario usuario);
 	Usuario get(int id);
 	List<Usuario> getAll();
+	void updateRecientes(Usuario usuario);
 	
 }

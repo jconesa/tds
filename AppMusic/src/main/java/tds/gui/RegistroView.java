@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -263,10 +265,11 @@ public class RegistroView {
 				OK = checkFields();
 				if (OK) {
 					boolean registrado = false;
+					LocalDate localDate = dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 					registrado = Controlador.getUnicaInstancia().registrarUsuario(txtNombre.getText(),
 							txtApellidos.getText(), txtEmail.getText(), txtUsuario.getText(),
 							new String(txtPassword.getPassword()), 
-							dateChooser.getDateFormatString(), "false");
+							localDate.toString(), "false");
 					if (registrado) {
 						JOptionPane.showMessageDialog(frmRegistro, "Asistente registrado correctamente.", "Registro",
 								JOptionPane.INFORMATION_MESSAGE);

@@ -1,7 +1,5 @@
 package tds.dao;
 
-import tds.dao.FactoriaDAO;
-import tds.dao.TDSUsuarioDAO;
 
 /** 
  * Factoria concreta DAO para el Servidor de Persistencia de la asignatura TDS.
