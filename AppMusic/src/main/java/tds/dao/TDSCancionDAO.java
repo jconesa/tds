@@ -100,8 +100,6 @@ public class TDSCancionDAO implements CancionDAO{
 	}
 
 	public Cancion get(int id) {
-		System.out.println("LA ID ES");
-		System.out.println(id);
 		Entidad eCancion = servPersistencia.recuperarEntidad(id);
 		
 		return entidadToCancion(eCancion);

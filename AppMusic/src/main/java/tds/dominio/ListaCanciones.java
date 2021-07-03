@@ -57,7 +57,6 @@ public class ListaCanciones {
 				listaCanciones.remove(c);
 			}
 		}
-		//System.out.println(listaCanciones.remove(cancion));
 	}
 	
 	public List<Cancion> getListaCanciones() {

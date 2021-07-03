@@ -3,8 +3,6 @@ package tds.controlador;
 import tds.dao.UsuarioDAO;
 
 import java.util.Comparator;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,8 +15,6 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfWriter;
-
-import tds.dao.CancionDAO;
 import tds.dao.DAOException;
 import tds.dao.FactoriaDAO;
 import tds.dao.ListaCancionesDAO;
@@ -26,8 +22,6 @@ import tds.dao.TDSCancionDAO;
 import tds.dominio.Usuario;
 import tds.dominio.Cancion;
 import tds.dominio.CatalogoCanciones;
-import tds.driver.FactoriaServicioPersistencia;
-import tds.driver.ServicioPersistencia;
 import umu.tds.componente.CargadorCanciones;
 import umu.tds.componente.Canciones;
 import umu.tds.componente.CancionesEvent;
@@ -41,16 +35,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 
 public final class Controlador implements CancionesListener {
@@ -168,22 +157,10 @@ public final class Controlador implements CancionesListener {
 		return tablaActual;
 	}
 	public void registrarListaCanciones() {
-		//Usuario usuario = CatalogoUsuarios.getUnicaInstancia().getUsuario(login);
-		//listaActual.setUsuario(usuarioActual);
-		//listaActual.setNombre(nombreLista);
-		System.out.println("------------------------------------------------");
-		System.out.println(listaActual.getNombre());
-		System.out.println("registrar lista canciones");
 		adaptadorLista.addLista(listaActual);
 		usuarioActual.addListaCanciones(listaActual);
 		
 		adaptadorUsuario.modificarUsuario(usuarioActual);
-		for(ListaCanciones lista : Controlador.getUnicaInstancia().getUsuarioActual().getListasCanciones()) {
-			System.out.println(lista.getNombre());
-			for(Cancion cancion : lista.getListaCanciones()) {
-				System.out.println(cancion.getTitulo());
-			}
-		}
 	}
 	
 	public void crearListaCanciones() {
@@ -205,8 +182,6 @@ public final class Controlador implements CancionesListener {
 	}
 	
 	public void playSong(String titulo) {
-		System.out.println("---------------------------------ROW---------------");
-		System.out.println(tablaActual.getSelectedRow());
 		if(tablaActual.getSelectedRow() != -1)
 		{
 			Cancion cancion = CatalogoCanciones.getUnicaInstancia().getCancion(titulo);
@@ -233,25 +208,7 @@ public final class Controlador implements CancionesListener {
 		repro.stopCancion();
 		cancionActual = null;
 	}
-	
-	/*public void nextSongPlaylist() throws DAOException {
-		System.out.println(cancionActual.getId());
-		Cancion cancionSiguiente = listaActual.getCancionSiguiente();
-		repro.playCancion(cancionSiguiente.getRutaFichero());
-		
-		// PONER IF CON -1
-		if(this.tablaActual != null) {
-			int indiceFila = tablaActual.getSelectedRow();
-			if(indiceFila + 1 <= tablaActual.getRowCount() - 1) {
-				String titulo = tablaActual.getValueAt(indiceFila + 1, 0).toString();
-				tablaActual.setRowSelectionInterval(indiceFila + 1, indiceFila + 1);
-				this.playSong(titulo);
-				
-			}
-		}
 
-	}*/
-	
 	public void nextSong() {
 		if(this.tablaActual != null) {
 			int indiceFila = tablaActual.getSelectedRow();
@@ -308,13 +265,13 @@ public final class Controlador implements CancionesListener {
         PdfWriter.getInstance(doc, file);
         doc.open();
         doc.newPage();
-        doc.add(new Phrase("Usuario: ".concat(usuarioActual.getLogin().concat("\n\n")),FontFactory.getFont(FontFactory.COURIER,25,Font.BOLD, new BaseColor(0,0,0))));
+        doc.add(new Phrase("Usuario: ".concat(usuarioActual.getLogin().concat("\n\n")),FontFactory.getFont(FontFactory.TIMES_ROMAN,25,Font.BOLD, new BaseColor(0,0,0))));
         for(ListaCanciones l: usuarioActual.getListasCanciones()) {
-            doc.add(new Phrase("Playlist: ".concat(l.getNombre().concat("\n")),FontFactory.getFont(FontFactory.COURIER,25,Font.BOLD, new BaseColor(0,0,0))));
+            doc.add(new Phrase("Playlist: ".concat(l.getNombre().concat("\n")),FontFactory.getFont(FontFactory.TIMES_ROMAN,25,Font.BOLD, new BaseColor(0,0,0))));
 
             for(Cancion c: l.getListaCanciones()) {
-                doc.add(new Phrase("\tNombre: ".concat(c.getTitulo().concat("\n")),FontFactory.getFont(FontFactory.COURIER,25,Font.BOLD, new BaseColor(0,0,0))));
-                doc.add(new Phrase("\tAutor: ".concat(c.getInterprete().concat("\n")),FontFactory.getFont(FontFactory.COURIER,25,Font.BOLD, new BaseColor(0,0,0))));
+                doc.add(new Phrase("\tNombre: ".concat(c.getTitulo().concat("\n")),FontFactory.getFont(FontFactory.COURIER,20,Font.BOLD, new BaseColor(0,0,0))));
+                doc.add(new Phrase("\tAutor: ".concat(c.getInterprete().concat("\n")),FontFactory.getFont(FontFactory.COURIER,20,Font.BOLD, new BaseColor(0,0,0))));
 
             }
             doc.add(new Phrase("\n",FontFactory.getFont(FontFactory.COURIER,25,Font.BOLD, new BaseColor(0,0,0))));
@@ -327,13 +284,10 @@ public final class Controlador implements CancionesListener {
 		try {
 			cancionesCatalogo = CatalogoCanciones.getUnicaInstancia().getCanciones();
 		} catch (DAOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		List<Cancion> cancionesTop = cancionesCatalogo.stream()
 					.sorted(Comparator.comparingInt(Cancion::getNumReproducciones).reversed()).limit(10).collect(Collectors.toList());
-		if(cancionesTop == null)
-			System.out.println("canciones top es nulo");
 		return cancionesTop;
 	}
 	
@@ -344,8 +298,10 @@ public final class Controlador implements CancionesListener {
 		for(umu.tds.componente.Cancion cancion : canciones.getCancion()) {
 			String ruta = "C:/recursos/songs";
 			Path rutaFichero = Paths.get(ruta + "/" + cancion.getEstilo() + "/" + cancion.getInterprete() + "-" + cancion.getTitulo() + ".mp3");
+			
 			System.out.println("--------------------------------------");
 			System.out.println(rutaFichero);
+			
 			if(!rutaFichero.toFile().exists()) {
 				File directorioGenero = new File(ruta + "/" + cancion.getEstilo());
 				if(!directorioGenero.exists()) {
@@ -358,15 +314,12 @@ public final class Controlador implements CancionesListener {
 					Files.copy(inputStream, rutaFichero);
 
 				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 			}
-			//String rutaUTF = rutaFichero.toString().replaceAll(" ", "%20");
 			Controlador.getUnicaInstancia().registrarCancion(cancion.getTitulo(), cancion.getInterprete(), cancion.getEstilo(), 0, rutaFichero.toString());
 		}
 		

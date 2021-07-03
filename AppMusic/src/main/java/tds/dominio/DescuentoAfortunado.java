@@ -1,6 +1,6 @@
 package tds.dominio;
 
-public class DescuentoJoven implements Descuento {
+public class DescuentoAfortunado implements Descuento {
 
 	@Override
 	public double calcDescuento() {

@@ -7,7 +7,6 @@ public interface CancionDAO {
 	boolean delete(Cancion cancion);
 	Cancion get(int id);
 	List<Cancion> getAll();
-	//Entidad cancionToEntidad(Cancion cancion);
 	
 	
 }

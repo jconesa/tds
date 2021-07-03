@@ -14,7 +14,6 @@ public class Usuario {
 	private String login;
 	private String password;
 	private String fechaNacimiento;
-	// Cambiar a boolean y convertir a string en bd
 	private String premium;
 	private List<ListaCanciones> listasCanciones;
 	private List<Cancion> listaRecientes;
@@ -101,10 +100,10 @@ public class Usuario {
 		int aleatorio = rand.nextInt(maximo);
 		
 		if(aleatorio > 60 && aleatorio < 85) {
-			descuento = new DescuentoJoven();
+			descuento = new DescuentoAfortunado();
 			precio = descuento.calcDescuento();
 		} else if(aleatorio >= 85) {
-			descuento = new DescuentoJubilado();
+			descuento = new DescuentoSuperAfortunado();
 			precio = descuento.calcDescuento();
 		}
 		

@@ -110,20 +110,20 @@ public class VentanaPrincipal {
 		frmVentanaPrincipal.setVisible(true);
 	}
 
-	private JPanel crearPanel1() {
-		JPanel panel1 = new JPanel();
-		panel1.setBackground(Color.WHITE);
-		frmVentanaPrincipal.getContentPane().add(panel1, BorderLayout.NORTH);
-		panel1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+	private void crearPanelNorte() {
+		panelNorte = new JPanel();
+		panelNorte.setBackground(Color.WHITE);
+		frmVentanaPrincipal.getContentPane().add(panelNorte, BorderLayout.NORTH);
+		panelNorte.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		JLabel lblNewLabel = new JLabel("Hola " + usuarioActual.getNombre());
-		panel1.add(lblNewLabel);
+		panelNorte.add(lblNewLabel);
 
 		JButton btnPremium = new JButton("Mejora tu cuenta");
 		btnPremium.setBackground(Color.WHITE);
 		btnPremium.setMinimumSize(new Dimension(100, 20));
 		btnPremium.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel1.add(btnPremium);
+		panelNorte.add(btnPremium);
 		
 
 
@@ -141,9 +141,9 @@ public class VentanaPrincipal {
 			
 		} else {
 			btnExportarPdf.setVisible(true);
-			panel1.remove(btnPremium);
-			panel1.add(btnExportarPdf);
-			panel1.add(btnTop10);
+			panelNorte.remove(btnPremium);
+			panelNorte.add(btnExportarPdf);
+			panelNorte.add(btnTop10);
 			System.out.println("ES INVISIBLE");
 		}
 
@@ -153,13 +153,12 @@ public class VentanaPrincipal {
 		btnLogout.setBackground(Color.WHITE);
 		btnLogout.setMinimumSize(new Dimension(100, 20));
 		btnLogout.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel1.add(btnLogout);
+		panelNorte.add(btnLogout);
 		
 		addManejadorBotonTop10(btnTop10);
 		addManejadorBotonPremium(btnPremium, btnExportarPdf, btnTop10);
 		addManejadorBotonExportar(btnExportarPdf);
 		addManejadorBotonLogout(btnLogout);
-		return panel1;
 	}
 
 	private void crearTabla() {
@@ -200,7 +199,6 @@ public class VentanaPrincipal {
 						cancion.getNumReproducciones() });
 			}
 		} catch (DAOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -209,7 +207,6 @@ public class VentanaPrincipal {
 
 	private void crearTabla2() {
 		tabla2 = new JTable();
-		// tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabla2.setCellSelectionEnabled(true);
 		tabla2.setShowGrid(true);
 		tabla2.setShowVerticalLines(true);
@@ -239,7 +236,6 @@ public class VentanaPrincipal {
 	}
 
 	private void crearLista() {
-		// TODO PONERLO EN SCROLLPANE
 		listaPlaylist = new JList<String>();
 		modeloLista = new DefaultListModel<String>();
 		listaPlaylist.setVisibleRowCount(1);
@@ -260,13 +256,7 @@ public class VentanaPrincipal {
 				}
 			}
 		});
-		/*
-		 * listaPlaylist.addListSelectionListener(new ListSelectionListener() { public
-		 * void valueChanged(ListSelectionEvent event) { if
-		 * (!event.getValueIsAdjusting()){ JList source = (JList)event.getSource();
-		 * String selected = source.getSelectedValue().toString(); showLista(selected);
-		 * // llamada a metodo } } });
-		 */
+
 	}
 
 	private void showLista(String titulo) {
@@ -339,21 +329,11 @@ public class VentanaPrincipal {
 		};
 		tablaMisListas.setModel(modeloMisListas);
 
-		// Se inicializa por defecto con todas las canciones, no con las deseadas
-
-		/*
-		 * try { for(Cancion cancion :
-		 * CatalogoCanciones.getUnicaInstancia().getCanciones()) {;
-		 * modeloPlaylist.addRow(new Object[]{cancion.getTitulo(),
-		 * cancion.getInterprete(), cancion.getGenero()}); } } catch (DAOException e) {
-		 * // TODO Auto-generated catch block e.printStackTrace(); }
-		 */
 
 	}
 
 	private void crearTablaRecientes() {
 		tablaRecientes = new JTable();
-		//tablaRecientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tablaRecientes.setCellSelectionEnabled(true);
 		tablaRecientes.setShowGrid(true);
 		tablaRecientes.setShowVerticalLines(true);
@@ -384,7 +364,6 @@ public class VentanaPrincipal {
 
 	private void crearTablaTop10() {
 		tablaTop10 = new JTable();
-		// tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tablaTop10.setCellSelectionEnabled(false);
 		tablaTop10.setShowGrid(true);
 		tablaTop10.setShowVerticalLines(true);
@@ -413,19 +392,18 @@ public class VentanaPrincipal {
 
 	}
 	private JPanel crearPanelMedio() {
-		JPanel panelMedio = new JPanel();
+		panelMedio = new JPanel();
 		frmVentanaPrincipal.getContentPane().add(panelMedio, BorderLayout.CENTER);
 		panelMedio.setLayout(new BorderLayout(0, 0));
 
 		return panelMedio;
 	}
 
-	private JPanel crearPanelBotones(JPanel panelMedio, JPanel panelExplorar, JPanel panelNuevaLista) {
-
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.WHITE);
-		frmVentanaPrincipal.getContentPane().add(panel_1, BorderLayout.WEST);
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
+	private void crearPanelBotones() {
+		panelBotones = new JPanel();
+		panelBotones.setBackground(Color.WHITE);
+		frmVentanaPrincipal.getContentPane().add(panelBotones, BorderLayout.WEST);
+		panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
 
 		Luz luz = new Luz();
 		luz.setMaximumSize(new Dimension(70, 70));
@@ -438,8 +416,7 @@ public class VentanaPrincipal {
 				fileChooser.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						// int seleccion =
-						// fileChooser.showOpenDialog(frmVentanaPrincipal.getContentPane());
+
 						if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
 							try {
 								System.out.println("IMPORTAR");
@@ -454,7 +431,7 @@ public class VentanaPrincipal {
 
 			}
 		});
-		panel_1.add(luz);
+		panelBotones.add(luz);
 
 		JSeparator separatorLuz = new JSeparator();
 		separatorLuz.setForeground(Color.WHITE);
@@ -462,14 +439,14 @@ public class VentanaPrincipal {
 		separatorLuz.setBorder(null);
 		separatorLuz.setMinimumSize(new Dimension(20, 20));
 		separatorLuz.setMaximumSize(new Dimension(20, 20));
-		panel_1.add(separatorLuz);
+		panelBotones.add(separatorLuz);
 		
 		ImageIcon icnExplorar = new ImageIcon(getClass().getResource("/lupa.png"));
 		JButton btnExplorar = new JButton("Explorar", icnExplorar);
 		btnExplorar.setMinimumSize(new Dimension(100, 20));
 		btnExplorar.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnExplorar.setBackground(Color.WHITE);
-		panel_1.add(btnExplorar);
+		panelBotones.add(btnExplorar);
 
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.WHITE);
@@ -477,7 +454,7 @@ public class VentanaPrincipal {
 		separator.setBorder(null);
 		separator.setMinimumSize(new Dimension(20, 20));
 		separator.setMaximumSize(new Dimension(20, 20));
-		panel_1.add(separator);
+		panelBotones.add(separator);
 
 		ImageIcon icnNuevaLista = new ImageIcon(getClass().getResource("/plus.png"));
 		JButton btnNuevaLista = new JButton("Nueva lista", icnNuevaLista);
@@ -485,7 +462,7 @@ public class VentanaPrincipal {
 		btnNuevaLista.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		btnNuevaLista.setBackground(Color.WHITE);
-		panel_1.add(btnNuevaLista);
+		panelBotones.add(btnNuevaLista);
 
 		JSeparator separator2 = new JSeparator();
 		separator2.setForeground(Color.WHITE);
@@ -493,14 +470,14 @@ public class VentanaPrincipal {
 		separator2.setBorder(null);
 		separator2.setMinimumSize(new Dimension(20, 20));
 		separator2.setMaximumSize(new Dimension(20, 20));
-		panel_1.add(separator2);
+		panelBotones.add(separator2);
 
 		ImageIcon icnRecientes = new ImageIcon(getClass().getResource("/recientes.png"));
 		JButton btnRecientes = new JButton("Recientes", icnRecientes);
 		btnRecientes.setBackground(Color.WHITE);
 		btnRecientes.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnRecientes.setMinimumSize(new Dimension(100, 20));
-		panel_1.add(btnRecientes);
+		panelBotones.add(btnRecientes);
 
 		JSeparator separator3 = new JSeparator();
 		separator3.setForeground(Color.WHITE);
@@ -508,14 +485,14 @@ public class VentanaPrincipal {
 		separator3.setBorder(null);
 		separator3.setMinimumSize(new Dimension(20, 20));
 		separator3.setMaximumSize(new Dimension(20, 20));
-		panel_1.add(separator3);
+		panelBotones.add(separator3);
 
 		ImageIcon icnListas = new ImageIcon(getClass().getResource("/listas.png"));
 		JButton btnListas = new JButton("Mis listas", icnListas);
 		btnListas.setBackground(Color.WHITE);
 		btnListas.setMinimumSize(new Dimension(100, 20));
 		btnListas.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel_1.add(btnListas);
+		panelBotones.add(btnListas);
 
 		addManejadorBotonExplorar(btnExplorar, panelMedio, panelExplorar);
 		addManejadorBotonNuevaLista(btnNuevaLista, panelMedio, panelNuevaLista);
@@ -523,8 +500,7 @@ public class VentanaPrincipal {
 		addManejadorBotonRecientes(btnRecientes);
 		crearLista();
 		listaPlaylist.setVisible(false);
-		panel_1.add(listaPlaylist);
-		return panel_1;
+		panelBotones.add(listaPlaylist);
 
 	}
 
@@ -534,7 +510,8 @@ public class VentanaPrincipal {
 	}
 
 	public JPanel crearPanelExplorarNorte() {
-		JPanel panelExplorarNorte = new JPanel();
+		panelExplorarNorte = new JPanel();
+		
 		JPanel panelExplorarNorteN = new JPanel();
 		JPanel panelExplorarNorteC = new JPanel();
 		panelExplorarNorte.setLayout(new BorderLayout(0, 0));
@@ -584,11 +561,11 @@ public class VentanaPrincipal {
 		return panelExplorarNorte;
 	}
 
-	public JPanel crearPanelExplorarNorte2() {
-		JPanel panelExplorarNortee = new JPanel();
+	public void crearPanelExplorarNorte2() {
+		panelNuevaListaNorte = new JPanel();
 		JPanel panelExplorarNorteN = new JPanel();
 		JPanel panelExplorarNorteC = new JPanel();
-		panelExplorarNortee.setLayout(new BorderLayout(0, 0));
+		panelNuevaListaNorte.setLayout(new BorderLayout(0, 0));
 
 		JLabel interprete = new JLabel("Interprete");
 		panelExplorarNorteN.add(interprete);
@@ -628,16 +605,15 @@ public class VentanaPrincipal {
 		btnCancelar.setBackground(Color.WHITE);
 		panelExplorarNorteC.add(btnCancelar);
 
-		panelExplorarNortee.add(panelExplorarNorteN, BorderLayout.NORTH);
-		panelExplorarNortee.add(panelExplorarNorteC, BorderLayout.CENTER);
+		panelNuevaListaNorte.add(panelExplorarNorteN, BorderLayout.NORTH);
+		panelNuevaListaNorte.add(panelExplorarNorteC, BorderLayout.CENTER);
 
 		addManejadorBotonBuscar2(btnBuscarr);
 
-		return panelExplorarNortee;
 	}
 
-	public JPanel crearPanelNuevaListaTablas() {
-		JPanel panelNuevaListaTablas = new JPanel();
+	public void crearPanelNuevaListaTablas() {
+		panelNuevaListaTablas = new JPanel();
 		JPanel panelNuevaListaIzquierda = new JPanel();
 		JPanel panelNuevaListarPlaylist = new JPanel();
 		JPanel panelCrearPlaylist = new JPanel();
@@ -682,18 +658,16 @@ public class VentanaPrincipal {
 		addManejadorBotonCrearPlaylist(crearPlaylist, tablaConScroll, tablaPlaylistConScroll, panelNuevaListaIzquierda, botones, panelNuevaListarPlaylist, panelCrearPlaylist );
 		addManejadorBotonAddCancionPlaylist(addCancion);
 		addManejadorBotonRemoveCancionPlaylist(quitarCancion);
-		return panelNuevaListaTablas;
 
 	}
 
-	public JPanel crearPanelNorteCentro() {
+	public void crearPanelNorteCentro() {
 		panelNuevaLista = new JPanel();
 		panelNuevaLista.setLayout(new BorderLayout(0, 0));
 		panelNuevaLista.add(panelNuevaListaNorte, BorderLayout.NORTH);
 		panelNuevaLista.add(panelNuevaListaTablas, BorderLayout.CENTER);
 		panelNuevaLista.add(panelNuevaListaSur, BorderLayout.SOUTH);
 
-		return panelNuevaLista;
 
 	}
 
@@ -703,22 +677,21 @@ public class VentanaPrincipal {
 		c.setPreferredSize(new Dimension(x, y));
 	}
 
-	public JPanel crearPanelExplorarTabla() {
-		JPanel panelExplorarTabla = new JPanel();
+	public void crearPanelExplorarTabla() {
+		panelExplorarTabla = new JPanel();
 		panelExplorarTabla.setLayout(new BorderLayout(0, 0));
 		crearTabla();
 		JScrollPane tablaConScroll = new JScrollPane(tabla);
 		panelExplorarTabla.add(tablaConScroll);
 		fixedSize(tablaConScroll, 100, 100);
 
-		return panelExplorarTabla;
 
 	}
 
-	public JPanel crearPanelExploraSur(JPanel tabla) {
+	public void crearPanelExploraSur() {
 
-		JPanel panelSurPlay = new JPanel();
-		panelSurPlay.setLayout(new BorderLayout(0, 0));
+		panelExplorarSur = new JPanel();
+		panelExplorarSur.setLayout(new BorderLayout(0, 0));
 
 		ImageIcon icnPlay = new ImageIcon(getClass().getResource("/play.png"));
 
@@ -726,46 +699,45 @@ public class VentanaPrincipal {
 		btnPlay.setMinimumSize(new Dimension(100, 20));
 		btnPlay.setMaximumSize(new Dimension(100, 20));
 
-		panelSurPlay.add(btnPlay, BorderLayout.NORTH);
+		panelExplorarSur.add(btnPlay, BorderLayout.NORTH);
 
 		ImageIcon icnPause = new ImageIcon(getClass().getResource("/pausa.png"));
 		JButton btnPause = new JButton(icnPause);
 		btnPause.setMinimumSize(new Dimension(100, 20));
 		btnPause.setAlignmentX(Component.BOTTOM_ALIGNMENT);
-		panelSurPlay.add(btnPause);
+		panelExplorarSur.add(btnPause);
 
 		ImageIcon icnAnterior = new ImageIcon(getClass().getResource("/anterior.png"));
 
 		JButton btnAnterior = new JButton(icnAnterior);
 		btnAnterior.setMinimumSize(new Dimension(100, 20));
 
-		panelSurPlay.add(btnAnterior, BorderLayout.WEST);
+		panelExplorarSur.add(btnAnterior, BorderLayout.WEST);
 
 		ImageIcon icnSiguiente = new ImageIcon(getClass().getResource("/siguiente.png"));
 
 		JButton btnSiguiente = new JButton(icnSiguiente);
 		btnSiguiente.setMinimumSize(new Dimension(100, 20));
 
-		panelSurPlay.add(btnSiguiente, BorderLayout.EAST);
+		panelExplorarSur.add(btnSiguiente, BorderLayout.EAST);
 		addManejadorBotonPlay(btnPlay);
 		addManejadorBotonStop(btnPause);
 		addManejadorBotonSiguiente(btnSiguiente);
 		addManejadorBotonAnterior(btnAnterior);
 
-		return panelSurPlay;
 	}
 
-	public JPanel crearPanelNuevaListaSur() {
+	public void crearPanelNuevaListaSur() {
 
-		JPanel panelSurNuevaLista = new JPanel();
-		panelSurNuevaLista.setLayout(new FlowLayout());
+		panelNuevaListaSur = new JPanel();;
+		panelNuevaListaSur.setLayout(new FlowLayout());
 
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setMinimumSize(new Dimension(20, 20));
 		btnAceptar.setMaximumSize(new Dimension(20, 20));
 		// btnAceptar.setAlignmentX(Component.BOTTOM_ALIGNMENT);
 
-		panelSurNuevaLista.add(btnAceptar);
+		panelNuevaListaSur.add(btnAceptar);
 
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setMinimumSize(new Dimension(20, 20));
@@ -773,10 +745,9 @@ public class VentanaPrincipal {
 
 		// btnCancelar.setAlignmentX(Component.BOTTOM_ALIGNMENT);
 
-		panelSurNuevaLista.add(btnCancelar);
+		panelNuevaListaSur.add(btnCancelar);
 
 		addManejadorBotonAceptarPlaylist(btnAceptar);
-		return panelSurNuevaLista;
 	}
 
 	public JPanel crearPanelMisListas() {
@@ -1167,13 +1138,12 @@ public class VentanaPrincipal {
 		panelMedio.repaint();
 	}
 	
-	public JPanel crearPanelExplorar() {
-		JPanel panelExplorar = new JPanel();
+	public void crearPanelExplorar() {
+		panelExplorar = new JPanel();
 		panelExplorar.setLayout(new BorderLayout(0, 0));
 		panelExplorar.add(panelExplorarNorte, BorderLayout.NORTH);
 		panelExplorar.add(panelExplorarSur, BorderLayout.SOUTH);
 		panelExplorar.add(panelExplorarTabla, BorderLayout.CENTER);
-		return panelExplorar;
 	}
 
 	public void addManejadorBotonExplorar(JButton btnExplorar, JPanel panelMedio, JPanel panelExplorar) {
@@ -1202,7 +1172,6 @@ public class VentanaPrincipal {
 				try {
 					controlador.exportarPDF();
 				} catch (FileNotFoundException | DocumentException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -1269,13 +1238,7 @@ public class VentanaPrincipal {
 		btnSiguiente.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				/*if (controlador.getCancionActual() != null) {
-
-				}*/
 				controlador.nextSong();
-				/*String titulo = (String) tablaActual.getValueAt(tablaActual.getSelectedRow() + 1, 0);
-				controlador.playSong(titulo);*/
-
 			}
 		});
 	}
@@ -1304,7 +1267,6 @@ public class VentanaPrincipal {
 					}
 
 				} catch (DAOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -1326,7 +1288,6 @@ public class VentanaPrincipal {
 					}
 
 				} catch (DAOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -1358,7 +1319,6 @@ public class VentanaPrincipal {
 						existe = true;
 						controlador.setListaActual(lista);
 						break;
-						//listaModificar = lista;
 					}
 				}
 
@@ -1374,7 +1334,6 @@ public class VentanaPrincipal {
 									cancion.getNumReproducciones() });
 						}
 					} catch (DAOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					for (Cancion cancion : listaActual.getListaCanciones()) {
@@ -1386,14 +1345,9 @@ public class VentanaPrincipal {
 					int reply = JOptionPane.showConfirmDialog(null, "¿Desea crear una nueva lista?",
 							"Crear nueva lista", JOptionPane.YES_NO_OPTION);
 					if (reply == JOptionPane.YES_OPTION) {
-						// controlador.registrarListaCanciones(nombrePlaylist.getText(),
-						// usuarioActual.getLogin());
 						JOptionPane.showMessageDialog(frmVentanaPrincipal, "Lista creada correctamente",
 								"Crear lista", JOptionPane.PLAIN_MESSAGE);
 
-						// while(modelo.getRowCount()>0) modelo.removeRow(0);
-						// unidades.setText("");
-						// dni.setText("");
 
 						usuarioActual.getListaCancionesTitulo(getTitulo());
 						controlador.crearListaCanciones();
@@ -1415,10 +1369,7 @@ public class VentanaPrincipal {
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// LinkedList<Cancion> canciones =
-				// CatalogoCanciones.getUnicaInstancia().getCanciones();
 				ListaCanciones playList = controlador.getListaActual();
-				// LinkedList<Cancion> playList = new LinkedList<Cancion>();
 				int indice = tabla2.getSelectedRow();
 				String titulo = (String) tabla2.getValueAt(tabla2.getSelectedRow(), 0);
 				Cancion cancion = CatalogoCanciones.getUnicaInstancia().getCancion(titulo);
@@ -1546,24 +1497,24 @@ public class VentanaPrincipal {
 		JPanel contentPane = (JPanel) frmVentanaPrincipal.getContentPane();
 		contentPane.setLayout(new BorderLayout(0, 0));
 
-		panelNorte = crearPanel1();
+		crearPanelNorte();
 
-		panelMedio = crearPanelMedio();
+		crearPanelMedio();
 
-		panelExplorarNorte = crearPanelExplorarNorte();
+		crearPanelExplorarNorte();
 
-		panelNuevaListaNorte = crearPanelExplorarNorte2();
-		panelExplorarTabla = crearPanelExplorarTabla();
-		panelNuevaListaTablas = crearPanelNuevaListaTablas(); // Dos listas juntas
-		panelExplorarSur = crearPanelExploraSur(panelExplorarTabla);
+		crearPanelExplorarNorte2();
+		crearPanelExplorarTabla();
+		crearPanelNuevaListaTablas(); // Dos listas juntas
+		crearPanelExploraSur();
 
 		// JPanel panelExplorarCentro = crearPanelExplorarCentro();
-		panelExplorar = crearPanelExplorar();
-		panelNuevaListaSur = crearPanelNuevaListaSur();
-		panelNuevaLista = crearPanelNorteCentro();
+		crearPanelExplorar();
+		crearPanelNuevaListaSur();
+		crearPanelNorteCentro(); // panel nueva lista
 		// JPanel panelExplorar2 = crearPanelExplorar(panelExplorarCentro);
 		// Cambiar
-		panelBotones = crearPanelBotones(panelMedio, panelExplorar, panelNuevaLista);
+		crearPanelBotones();
 		
 		crearPanelMisListas();
 		crearPanelRecientes();

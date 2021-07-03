@@ -44,25 +44,8 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
 
-	/*private Usuario entidadToUsuario(Entidad eUsuario) {
-
-		String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
-		String apellidos = servPersistencia.recuperarPropiedadEntidad(eUsuario, APELLIDOS);
-		String email = servPersistencia.recuperarPropiedadEntidad(eUsuario, EMAIL);
-		String login = servPersistencia.recuperarPropiedadEntidad(eUsuario, LOGIN);
-		String password = servPersistencia.recuperarPropiedadEntidad(eUsuario, PASSWORD);
-		String fechaNacimiento = servPersistencia.recuperarPropiedadEntidad(eUsuario, FECHA_NACIMIENTO);
-		String premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, PREMIUM);
-
-
-		Usuario usuario = new Usuario(nombre, apellidos, email, login, password, fechaNacimiento, premium);
-		usuario.setId(eUsuario.getId());
-		
-		return usuario;
-	}*/
 	private Usuario entidadToUsuario(Entidad eUsuario) {
 
-		//List<ListaCanciones> listas = new LinkedList<ListaCanciones>();
 		
 		String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
 		String apellidos = servPersistencia.recuperarPropiedadEntidad(eUsuario, APELLIDOS);
@@ -77,19 +60,6 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		usuario.setId(eUsuario.getId());
 		PoolDAO.getUnicaInstancia().addObjeto(usuario.getId(), usuario);
 		
-		/*String [] idsListaCanciones = servPersistencia.recuperarPropiedadEntidad(eUsuario, LISTA_CANCIONES).trim().split(" ");
-		if(idsListaCanciones.equals(null))
-			System.out.println("NULO");
-		for(String idListaCanciones : idsListaCanciones) {
-			if(!idListaCanciones.equals(""))
-				try {
-					listas.add(FactoriaDAO.getInstancia().getListaCancionesDAO().recuperarListaCanciones(Integer.parseInt(idListaCanciones)));
-				} catch (NumberFormatException | DAOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}
-		*/
 		if(servPersistencia.recuperarPropiedadEntidad(eUsuario, LISTA_CANCIONES) != null)
 		{
 			System.out.println("NO ES NULO");
@@ -104,15 +74,7 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 
 		}
 		return usuario;
-		
-		/*String listaCodigo = servPersistencia.recuperarPropiedadEntidad(eUsuario, LISTA_CANCIONES);
-		
-		if(listaCodigo != null && !listaCodigo.equals("") ) {
-			List<ListaCanciones> listasCanciones = obtenerListasDesdeCodigos(listaCodigo);
-			usuario.setListasCanciones(listasCanciones);
-		
-		}
-		return usuario;*/
+
 	}
 	private Entidad usuarioToEntidad(Usuario usuario) {
 		
@@ -136,13 +98,6 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		return eUsuario;
 	}
 
-	/*public void create(Usuario usuario) {
-		
-		Entidad eUsuario = this.usuarioToEntidad(usuario);
-		eUsuario = servPersistencia.registrarEntidad(eUsuario);
-		usuario.setId(eUsuario.getId());
-	}*/
-	
 	public void create(Usuario usuario) {
 		Entidad eUsuario; 
 		boolean existe = true;
@@ -249,8 +204,6 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 
 		List<Usuario> usuarios = new LinkedList<Usuario>();
 		for (Entidad eUsuario : entidades) {
-			System.out.println("id de usuario");
-			System.out.println(eUsuario.getId());
 			usuarios.add(get(eUsuario.getId()));
 		}
 		
@@ -262,16 +215,12 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		for (Cancion cancion : lista) {
 			aux += cancion.getId() + " ";
 		}
-		System.out.println("OBTENER CODIGOS");
-		System.out.println(aux.trim());
 		return aux.trim();
 	}
 	
 	private List<Cancion> obtenerRecientesDesdeCodigos(String lista) {
 
 		List<Cancion> recientes= new LinkedList<Cancion>();
-		System.out.println("OBTENER LISTAS DESDE CODIGOS");
-		System.out.println(lista);
 		StringTokenizer strTok = new StringTokenizer(lista, " ");
 		TDSCancionDAO adaptadorCancion = TDSCancionDAO.getUnicaInstancia();
 		while (strTok.hasMoreTokens()) {
@@ -284,15 +233,11 @@ public final class TDSUsuarioDAO implements UsuarioDAO {
 		for (ListaCanciones lista : listas) {
 			aux += lista.getId() + " ";
 		}
-		System.out.println("OBTENER CODIGOS");
-		System.out.println(aux.trim());
 		return aux.trim();
 	}
 	private List<ListaCanciones> obtenerListasDesdeCodigos(String listas) {
 
 		List<ListaCanciones> listasCanciones = new LinkedList<ListaCanciones>();
-		System.out.println("OBTENER LISTAS DESDE CODIGOS");
-		System.out.println(listas);
 		StringTokenizer strTok = new StringTokenizer(listas, " ");
 		TDSListaCancionesDAO adaptadorLista = TDSListaCancionesDAO.getUnicaInstancia();
 		while (strTok.hasMoreTokens()) {

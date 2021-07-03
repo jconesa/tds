@@ -45,11 +45,7 @@ public class TDSListaCancionesDAO implements ListaCancionesDAO {
 		}
 		
 		if(existe) return;
-		// registrar primero los atributos que son objetos
-		/*// registrar lineas de venta
-		TDSCancionDAO adaptadorCancion = TDSCancionDAO.getUnicaInstancia();
-		for (Cancion c : listaCanciones.getListaCanciones())
-			adaptadorCancion.create(c);*/
+
 		// Crear lista canciones
 		eLista = new Entidad();
 		eLista.setNombre(NOMBRE);
@@ -107,7 +103,7 @@ public class TDSListaCancionesDAO implements ListaCancionesDAO {
 		ListaCanciones lista = new ListaCanciones(nombre);
 		lista.setId(id);
 
-		// IMPORTANTE:añadir la venta al pool antes de llamar a otros
+		// IMPORTANTE:añadir la lista al pool antes de llamar a otros
 		// adaptadores
 		PoolDAO.getUnicaInstancia().addObjeto(id, lista);
 

@@ -8,7 +8,6 @@ public class Cancion {
 	private String genero;
 	private String rutaFichero;
 	private int numReproducciones;
-	//private String url;
 	
 	public Cancion(String titulo, String interprete, String genero, String rutaFichero, int numReproducciones) {
 		this.id = 0;
@@ -17,7 +16,6 @@ public class Cancion {
 		this.genero = genero;
 		this.rutaFichero = rutaFichero;
 		this.numReproducciones = numReproducciones;
-		//this.url = url;
 	}
 	
 	public Cancion(String titulo, String interprete, String genero, int numReproducciones) {
@@ -26,7 +24,6 @@ public class Cancion {
 		this.interprete = interprete;
 		this.genero = genero;
 		this.numReproducciones = numReproducciones;
-		//this.url = url;
 	}
 	
 	public int getId() {
