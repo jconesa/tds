@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<canciones xmlns="http://www.tds.es/canciones" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+	xs:schemaLocation="http://www.tds.es/canciones canciones.xsd">
+	
+	<cancion titulo="Time">
+		<URL><![CDATA[https://archive.org/download/lp_the-dark-side-of-the-moon_pink-floyd/disc1/01.04.%20Time_sample.mp3]]></URL>
+		<estilo>Rock</estilo>
+		<interprete>Pink Floyd</interprete>
+	</cancion>
+	<cancion titulo="Money">
+		<URL><![CDATA[https://archive.org/download/lp_the-dark-side-of-the-moon_pink-floyd/disc1/02.01.%20Money_sample.mp3]]></URL>
+		<estilo>Rock</estilo>
+		<interprete>Pink Floyd</interprete>
+	</cancion>
+
+</canciones>

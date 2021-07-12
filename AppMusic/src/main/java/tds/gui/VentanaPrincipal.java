@@ -540,6 +540,10 @@ public class VentanaPrincipal {
 		generos.addItem("Romántica");
 		generos.addItem("Folk");
 		generos.addItem("Tango");
+		generos.addItem("Ballad");
+		generos.addItem("Cabaret");
+		generos.addItem("Metal");
+		generos.addItem("Punk");
 		panelExplorarNorteN.add(generos, BorderLayout.NORTH);
 
 		JButton btnBuscar = new JButton("Buscar");
@@ -1384,6 +1388,7 @@ public class VentanaPrincipal {
 				}
 				clearTablePlayList();
 				clearTable2();
+				controlador.setListaActual(null);
 				
 
 			}

@@ -55,6 +55,7 @@ public class ListaCanciones {
 		for(Cancion c : listaCanciones) {
 			if(cancion.getTitulo().equals(c.getTitulo())) {
 				listaCanciones.remove(c);
+				return;
 			}
 		}
 	}
